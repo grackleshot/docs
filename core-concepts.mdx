@@ -1,0 +1,83 @@
+---
+title: "Core Concepts: How SupportDesk Organizes Support Work"
+sidebarTitle: "Core Concepts"
+description: "Understand the key entities in SupportDesk — tickets, agents, queues, SLAs, and workspaces — before you start configuring your support workflow."
+---
+
+Before you dive into configuring workflows, routing rules, or SLA policies, it helps to understand the fundamental building blocks of SupportDesk. Every feature you'll use — from triage automation to reporting — is built on top of a small set of core entities. This page introduces each one, explains what it represents, and shows how it connects to the rest of the platform.
+
+## Tickets
+
+Tickets are the primary unit of work in SupportDesk. Every customer issue, technical question, or support request lives as a ticket. Each ticket contains:
+
+- **Subject** — a short summary of the issue.
+- **Requester** — the customer or user who submitted the request.
+- **Priority** — one of Low, Normal, High, or Urgent, used to drive SLA tracking and queue ordering.
+- **Status** — the current state of the ticket: Open, Pending, On Hold, or Resolved.
+- **Custom fields** — structured data you define, such as `Product Area`, `Customer Tier`, or `Affected Version`.
+- **Full communication history** — every inbound message, outbound reply, and internal note, in chronological order.
+
+<Note>
+  Every ticket in SupportDesk captures the complete context of an issue — including attachments, internal notes, agent activity, and field changes. Nothing is discarded. This full audit trail is critical for complex technical cases where decisions made days earlier may affect the resolution.
+</Note>
+
+Tickets can be created automatically via email or API, or manually from the dashboard. Once created, they flow through your configured triage rules before landing in the right queue.
+
+## Agents
+
+Agents are the team members who handle tickets. Each agent has a **role** that controls what they can see and do inside your workspace:
+
+- **Admin** — full access to all tickets, settings, billing, and configuration.
+- **Agent** — can view, reply to, and manage tickets within their assigned queues and teams.
+- **Viewer** — read-only access; useful for stakeholders, managers, or engineers who need visibility without taking action.
+
+Agents can be assigned tickets directly, mentioned in internal notes, and grouped into teams for routing purposes. Each agent has a profile that includes availability status and workload metrics.
+
+## Teams
+
+Teams are logical groups of agents used to organize your support function and drive ticket routing. For example, you might have a **Platform Team** for infrastructure issues, an **Integrations Team** for API and webhook support, and a **General Team** for everything else.
+
+When you define routing rules or manually assign a ticket, you can assign to a team rather than an individual — SupportDesk will distribute the ticket to an available agent within that team based on your assignment settings.
+
+## Queues
+
+Queues are filtered views of your ticket inbox, designed to help agents focus on the right work at the right time. A queue is defined by a set of filter conditions — for example, "all open, high-priority tickets assigned to the Platform Team" or "all tickets awaiting a first response."
+
+You can create as many queues as your workflow requires. Queues are visible in the sidebar and update in real time. Every agent sees the queues relevant to their role and team, reducing noise and keeping workloads manageable.
+
+## Channels
+
+Channels define how tickets enter SupportDesk. The platform supports three channel types:
+
+- **Email** — connect a support inbox (e.g., `support@acme.com`) and all incoming messages become tickets automatically.
+- **API** — use the SupportDesk REST API to programmatically create tickets from your own systems, internal tools, or third-party integrations.
+- **Web form** — embed a customizable contact form on your website or documentation site; submissions create tickets directly in your workspace.
+
+Each channel can be configured independently, and tickets from different channels can be routed differently using triage rules.
+
+## SLAs
+
+SLAs (Service Level Agreements) are time-based policies that define how quickly your team must respond to and resolve tickets. In SupportDesk, you configure SLA policies by priority level or customer tier — for example:
+
+- Urgent tickets: first response within 1 hour, resolution within 4 hours.
+- High tickets: first response within 4 hours, resolution within 24 hours.
+- Normal tickets: first response within 8 hours, resolution within 3 business days.
+
+SupportDesk tracks SLA health on every open ticket in real time. Agents see a countdown clock on at-risk tickets, and Admins receive alerts before a breach occurs. SLA data is also available in reporting, making it easy to identify patterns and hold teams accountable.
+
+## Workspace
+
+Your workspace is your organization's isolated instance of SupportDesk. It contains all of your tickets, agents, teams, channels, queues, SLA policies, and configuration in a single, secure environment. Your workspace is accessible at your unique subdomain (e.g., `acme.supportdesk.io`).
+
+Each workspace is completely independent — data is never shared between workspaces. If you support multiple products or business units that require strict separation, you can create multiple workspaces under the same billing account.
+
+---
+
+<CardGroup cols={2}>
+  <Card title="Tickets Overview" icon="ticket" href="/tickets/overview">
+    Dive deeper into how tickets work — statuses, custom fields, communication threads, and the full ticket lifecycle.
+  </Card>
+  <Card title="Triage & Routing" icon="route" href="/tickets/triage-and-routing">
+    Learn how to set up rules that automatically assign, tag, and prioritize incoming tickets based on your workflow.
+  </Card>
+</CardGroup>

@@ -1,0 +1,97 @@
+---
+title: "How to Create and Submit Support Tickets"
+sidebarTitle: "Creating Tickets"
+description: "Create support tickets in SupportDesk manually, via email, or through the API. Learn how to capture the right context for complex technical issues from the start."
+---
+
+The quality of a support ticket determines how quickly your team can resolve the underlying issue. SupportDesk gives you three ways to create tickets — through the UI, by sending an email, or programmatically via the API — and each method lets you capture the full context that complex technical cases demand. The more information a ticket contains at creation time, the less back-and-forth your team needs before they can start solving the problem.
+
+## Three Ways to Create a Ticket
+
+<Tabs>
+  <Tab title="Manual (UI)">
+    Creating a ticket directly in the SupportDesk interface is the fastest way to open a request on a customer's behalf or capture an issue that came in through an informal channel like a phone call or Slack message.
+
+    <Steps>
+      <Step title="Open the New Ticket form">
+        From anywhere in SupportDesk, click the **+ New Ticket** button in the top navigation bar. The new ticket form opens in a full-page view.
+      </Step>
+      <Step title="Fill in the subject and description">
+        Enter a clear, descriptive subject — something specific enough that any agent can understand the issue at a glance. In the description field, include the full context of the problem: what the customer was doing, what they expected to happen, and what actually occurred. Paste in error messages, stack traces, or log excerpts if you have them.
+      </Step>
+      <Step title="Set the priority">
+        Choose a priority level from the **Priority** dropdown: **Low**, **Normal**, **High**, or **Urgent**. Priority determines where the ticket appears in the queue and which SLA clock applies. When in doubt, set a higher priority — it's easy to lower it later, and it ensures the ticket gets seen promptly.
+      </Step>
+      <Step title="Add custom fields">
+        Fill in any custom fields your organization has configured, such as Account Plan, Affected Component, or Environment. These fields help your team route and triage the ticket correctly without having to ask the customer for more information.
+      </Step>
+      <Step title="Assign a team or agent">
+        Use the **Assign To** dropdown to route the ticket directly to a team or a specific agent. If you're unsure of the right owner, leave it unassigned — your routing rules or a triage agent will handle assignment.
+      </Step>
+      <Step title="Submit the ticket">
+        Click **Submit Ticket**. SupportDesk creates the ticket, sends a confirmation to the requester's email address, and places it in the appropriate queue.
+      </Step>
+    </Steps>
+
+    <Tip>
+      If you're creating a ticket on behalf of a customer, use the **Requester** field to enter their email address. The ticket confirmation and all subsequent reply notifications will go to them, not to you.
+    </Tip>
+  </Tab>
+
+  <Tab title="Via Email">
+    Any email sent to your team's support address automatically becomes a ticket in SupportDesk. No configuration is required on the customer's end — they just send an email as they normally would.
+
+    Here's how the conversion works:
+
+    - **Email subject** → Ticket subject
+    - **Email body** → Ticket description
+    - **Sender address** → Requester email (SupportDesk matches this to an existing contact or creates a new one)
+    - **Attachments** → Added to the ticket's attachments panel
+    - **CC recipients** → Added as ticket followers who receive update notifications
+
+    Your support email address is shown in **Settings → Channels → Email**. You can configure multiple inbound addresses and route tickets from each address to a different team using routing rules.
+
+    <Note>
+      Email threading is handled automatically. When a customer replies to a ticket notification email, their reply is appended to the original ticket's timeline — a new ticket is not created. SupportDesk uses the ticket ID embedded in the email headers to match replies to the correct ticket, even if the subject line changes.
+    </Note>
+  </Tab>
+
+  <Tab title="Via API">
+    Use the SupportDesk REST API to create tickets programmatically. This is ideal for automated escalations, infrastructure alerts, or any integration where your systems need to open support requests without human intervention.
+
+    Send a `POST` request to `/v1/tickets` with your ticket data as a JSON body:
+
+    ```bash
+    curl -X POST https://api.supportdesk.io/v1/tickets \
+      -H "Authorization: Bearer YOUR_API_KEY" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "subject": "Database connection pooling issue in production",
+        "description": "We are seeing intermittent connection timeouts...",
+        "priority": "high",
+        "requester_email": "eng@customer.com",
+        "custom_fields": {
+          "account_plan": "Enterprise",
+          "affected_component": "Database"
+        }
+      }'
+    ```
+
+    A successful request returns a `201 Created` response with the full ticket object, including the newly assigned `ticket_id`.
+
+    **Required fields:** `subject`, `requester_email`
+
+    **Optional fields:** `description`, `priority` (defaults to `normal`), `assignee_id`, `team_id`, `tags`, `custom_fields`
+
+    You can find your API key in **Settings → API → API Keys**. Keep your API key secret — it has full write access to your SupportDesk account.
+
+    <Tip>
+      Populate `custom_fields` at creation time whenever possible. Tickets that arrive with custom fields already filled in skip several steps in the triage process — your routing rules can act on those values immediately, and agents don't need to chase down account details before they start working.
+    </Tip>
+  </Tab>
+</Tabs>
+
+## Next Steps
+
+- [Triage & Routing](/tickets/triage-and-routing) — Automatically assign and prioritize tickets as they arrive.
+- [Statuses & Workflows](/tickets/statuses-and-workflows) — Understand how tickets move through your support process.

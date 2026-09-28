@@ -1,0 +1,91 @@
+---
+title: "SupportDesk REST API Reference"
+sidebarTitle: "Introduction"
+description: "The SupportDesk REST API lets you create tickets, post comments, manage users, and configure webhooks programmatically. Base URL: https://api.supportdesk.io/v1"
+---
+
+The SupportDesk REST API gives you programmatic access to everything your support team does in the dashboard. You can create and update tickets, post replies and internal notes, manage agents and contacts, and register webhooks to stream events to your own systems — all over standard HTTPS requests with JSON payloads. Whether you're building a customer-facing intake form, syncing ticket data into your data warehouse, or wiring SupportDesk into a broader automation pipeline, the API is the building block.
+
+## Base URL
+
+All API requests are made to the following base URL:
+
+```
+https://api.supportdesk.io/v1
+```
+
+Every endpoint path in this reference is relative to this base URL. For example, `GET /tickets` means `GET https://api.supportdesk.io/v1/tickets`.
+
+## Request Format
+
+All request bodies must be JSON. Set the `Content-Type` header on every request that includes a body:
+
+```bash
+Content-Type: application/json
+```
+
+Query parameters are plain URL-encoded strings. Path parameters are interpolated directly into the URL (e.g., `/tickets/:id`).
+
+## Authentication
+
+Every request must include a valid API key in the `Authorization` header using the Bearer scheme:
+
+```
+Authorization: Bearer YOUR_API_KEY
+```
+
+You can generate API keys in your workspace under **Settings > API Keys**. See the [Authentication](/api/authentication) page for full details on key types, permissions, and rotation.
+
+## Response Format
+
+All responses — success and error alike — return JSON with a `Content-Type: application/json` header.
+
+**Successful responses** return the requested or created resource object directly:
+
+```json
+{
+  "id": "tkt_01HXYZ123",
+  "subject": "Login page returns 500",
+  "status": "open",
+  ...
+}
+```
+
+**Error responses** return a structured error object so you can handle failures programmatically:
+
+```json
+{
+  "error": {
+    "code": "validation_error",
+    "message": "The 'subject' field is required."
+  }
+}
+```
+
+The `code` field is a stable machine-readable string you can branch on in your code. The `message` field is a human-readable description intended for logging and debugging.
+
+## HTTP Status Codes
+
+SupportDesk uses standard HTTP status codes to indicate whether a request succeeded or failed.
+
+| Status Code | Meaning |
+|---|---|
+| `200 OK` | Request succeeded. The response body contains the requested resource. |
+| `201 Created` | Resource was successfully created. The response body contains the new resource. |
+| `400 Bad Request` | The request was malformed or contained invalid parameters. Check the error message for details. |
+| `401 Unauthorized` | No API key was provided, or the key is malformed, expired, or revoked. |
+| `403 Forbidden` | The API key is valid but does not have permission to perform the requested action. |
+| `404 Not Found` | The requested resource does not exist or your key does not have access to it. |
+| `422 Unprocessable Entity` | The request was well-formed but failed validation. The error body will list the specific fields at fault. |
+| `429 Too Many Requests` | You have exceeded your plan's rate limit. See the `Retry-After` header and the [Rate Limits](/api/rate-limits) page. |
+| `500 Internal Server Error` | Something went wrong on SupportDesk's end. These are rare; check [status.supportdesk.io](https://status.supportdesk.io) if they persist. |
+
+## Versioning
+
+The current API version is **v1**, reflected in the base URL. SupportDesk follows a stable versioning policy: we will not introduce breaking changes within v1. When breaking changes are necessary, they will be released under a new version (e.g., `/v2`) with a migration guide published in advance and a deprecation window of at least 90 days for the previous version.
+
+Non-breaking additions — new optional fields, new endpoints, new event types — may be added to v1 at any time. We recommend writing your integration defensively (ignoring unknown fields) to stay compatible as the API evolves.
+
+---
+
+Ready to start building? Head to [Authentication](/api/authentication) to generate your first API key, or jump straight to [Tickets](/api/tickets) to explore the core resource. If you're building event-driven integrations, check out [Rate Limits](/api/rate-limits) to understand throughput constraints before you go to production.

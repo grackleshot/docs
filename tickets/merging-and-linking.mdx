@@ -1,0 +1,78 @@
+---
+title: "Merge Duplicate Tickets and Link Related Issues"
+sidebarTitle: "Merging & Linking"
+description: "Reduce duplicate work by merging related tickets into one and linking issues across multiple tickets to track connected customer problems in SupportDesk."
+---
+
+In a support environment where every ticket is complex, duplicate and related tickets create real problems. Two customers reporting the same underlying bug can generate parallel investigation threads, inconsistent answers, and wasted effort. SupportDesk gives you two tools to address this: **merging**, which consolidates duplicate tickets into a single unified record, and **linking**, which creates visible relationships between tickets that are connected but should remain separate. Knowing when to use each one keeps your queue clean and your team working efficiently.
+
+## Merging Tickets
+
+When two tickets describe the same issue from the same or different customers, merging them eliminates the duplicate and consolidates all communication into one place. After a merge, your team works a single ticket and all involved customers receive updates from that one thread.
+
+<Warning>
+  Merging is irreversible. Once you merge a ticket, the secondary ticket is permanently closed and cannot be restored to its original state. All of its replies and history are preserved in the primary ticket's timeline, but the secondary ticket itself will show only a closed status with a link to the primary. Confirm that you're merging the correct tickets before proceeding.
+</Warning>
+
+### How to Merge Tickets
+
+<Steps>
+  <Step title="Open the primary ticket">
+    Navigate to the ticket you want to keep as the primary record — the one that will remain open and contain the consolidated conversation. This is typically the earlier or more detailed of the two tickets.
+  </Step>
+  <Step title="Click Merge">
+    In the ticket's action menu (the **⋯** icon in the top-right corner of the ticket), select **Merge Ticket**.
+  </Step>
+  <Step title="Search for the duplicate">
+    In the merge dialog, search for the ticket you want to merge into the primary. You can search by ticket ID, subject, or requester name. Review the preview to confirm you've found the right ticket.
+  </Step>
+  <Step title="Confirm the merge">
+    Review the summary: the primary ticket that will remain open, the secondary ticket that will be closed, and the requesters who will be combined into the conversation. Click **Confirm Merge** to proceed.
+  </Step>
+  <Step title="Review the merged ticket">
+    The primary ticket now contains all replies and timeline events from both tickets, presented in chronological order. The requester from the secondary ticket is added as a follower and will receive all future updates. The secondary ticket is closed with a note linking to the primary.
+  </Step>
+</Steps>
+
+What happens after a merge:
+- All replies from the secondary ticket appear in the primary ticket's timeline, clearly labeled with their original ticket ID.
+- The secondary ticket's requester is notified that their request has been consolidated with a related ticket.
+- The secondary ticket is permanently closed and marked as a duplicate with a link to the primary.
+- Any custom field values, tags, or attachments from the secondary ticket are carried over to the primary.
+
+## Linking Tickets
+
+Linking creates a visible, navigable relationship between two tickets without consolidating them. Linked tickets remain independent — they each have their own conversation, status, and assignee — but they display a reference to each other in the sidebar.
+
+Use linking instead of merging when:
+- Two customers are hitting the same underlying bug, but their specific circumstances, workarounds, or contact history are different enough to warrant separate conversations.
+- One ticket is blocked by another that needs to be resolved first.
+- Two issues are related and your team wants to track them together for reporting, without combining customer communications.
+
+<Tip>
+  Linking is particularly powerful when multiple customers report the same underlying bug. Link all affected tickets to a single "root cause" ticket tracked by your engineering liaison. When the bug is fixed, you can bulk-update all linked tickets from one place and send coordinated resolutions to every affected customer at once.
+</Tip>
+
+### How to Link Tickets
+
+1. Open either of the two tickets you want to link.
+2. In the **Sidebar**, scroll to the **Linked Tickets** section and click **+ Add Link**.
+3. Choose the link type (see the table below) from the dropdown.
+4. Search for the ticket you want to link by ID, subject, or requester.
+5. Click **Add Link**. The link appears in the sidebar of both tickets immediately.
+
+To remove a link, hover over it in the **Linked Tickets** section and click the **×** icon.
+
+### Link Types
+
+| Link Type | Meaning |
+|---|---|
+| **Related** | The two tickets are connected in some way but neither depends on the other. Use this as a general-purpose relationship when the connection is informational. |
+| **Blocks** | The current ticket must be resolved before the linked ticket can proceed. (e.g., "This infrastructure ticket blocks the customer's onboarding ticket.") |
+| **Blocked By** | The current ticket cannot proceed until the linked ticket is resolved. The inverse of Blocks — adding a "Blocked By" link on one ticket automatically adds a "Blocks" link on the other. |
+| **Duplicates** | The current ticket is a duplicate of the linked ticket but should not be merged — for example, when the tickets are in different states or were created by different teams and need to stay separate for tracking purposes. |
+
+## Next Steps
+
+- [Statuses & Workflows](/tickets/statuses-and-workflows) — Learn how merged tickets interact with your status lifecycle.
+- [Overview](/tickets/overview) — Review the full ticket field reference.

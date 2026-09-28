@@ -1,47 +1,79 @@
 ---
-title: "Quickstart"
-description: "Begin with a guide on the fastest path to a successful outcome"
+title: "Get Started with SupportDesk in Under 10 Minutes"
+sidebarTitle: "Quickstart"
+description: "Set up your SupportDesk workspace, invite your team, connect your email channel, and handle your first support ticket — all in under 10 minutes."
 ---
 
-Describe how someone begins using your product. What is the first thing they need to do? Are there any prerequisites?
-
-A quickstart should take someone from zero to using your product. They'll get a quick win and a sense of what they can accomplish.
-
-## Prerequisites
-
-Before you begin, you must have:
-
-- Requirement one (for example, Node.js 18+, a free account, an API key)
-- Requirement two (for example, a compatible device, a compatible browser, a compatible operating system)
-
-## Get started
+This guide walks you through everything you need to go from a blank slate to a fully operational SupportDesk workspace. By the end, you'll have your team set up, your support email connected, and your first ticket created, assigned, and replied to. No lengthy configuration required — you can refine your workflow as you go.
 
 <Steps>
-  <Step title="Install">
-    Describe how to install your product or sign up.
+  <Step title="Create your workspace">
+    Go to [app.supportdesk.io](https://app.supportdesk.io) and sign up for a free account. During signup, you'll be prompted to:
 
-    ```bash
-    npm install your-package
-    ```
+    - Choose a **workspace name** (typically your company name, e.g., `Acme Support`).
+    - Set a **subdomain** (e.g., `acme.supportdesk.io`) — this becomes your team's unique SupportDesk URL.
+
+    <Note>
+      You'll receive a verification email after signup. Click the link in that email before proceeding — some setup steps, including email channel configuration, require a verified account.
+    </Note>
+
+    Once verified, you'll land on your workspace dashboard, ready to configure.
   </Step>
-  <Step title="Configure">
-    Describe any setup or configuration needed before first use.
 
-    ```bash
-    your-cli init
-    ```
+  <Step title="Invite your team members">
+    Your workspace is only as useful as the people in it. To add your team:
+
+    1. Navigate to **Settings → Agents**.
+    2. Click **Invite Agent** and enter each person's email address.
+    3. Assign each agent a **role**:
+       - **Admin** — full access to settings, billing, and all tickets.
+       - **Agent** — can view, respond to, and manage tickets within their assigned queues.
+       - **Viewer** — read-only access, useful for stakeholders who need visibility without the ability to act.
+
+    Invited teammates will receive an email prompting them to accept and set up their account.
   </Step>
-  <Step title="Run it">
-    Show the first thing a user does to see it working.
 
-    ```bash
-    your-cli start
-    ```
+  <Step title="Connect your support email">
+    Connecting your email channel turns incoming emails into tickets automatically — no manual entry required.
+
+    1. Go to **Settings → Channels → Email**.
+    2. Enter your support email address (e.g., `support@acme.com`).
+    3. Choose your connection method:
+       - **Email forwarding** — add a forwarding rule in your email provider (Gmail, Outlook, etc.) to forward messages to the address shown in SupportDesk.
+       - **Custom MX record** — update your domain's MX records to route mail directly through SupportDesk for tighter integration.
+
+    <Tip>
+      Take a few minutes now to set up **custom fields** on your tickets — things like `Product Area`, `Customer Tier`, or `Environment`. Adding these early makes triage, routing, and reporting significantly more powerful from day one.
+    </Tip>
+
+    Once connected, send a test email to your support address and confirm it appears as a ticket in your inbox.
+  </Step>
+
+  <Step title="Create your first ticket">
+    You can create a ticket in one of two ways:
+
+    - **Via email** — send a message to your connected support address. It will appear in your ticket inbox within seconds.
+    - **Manually** — click **New Ticket** in the dashboard, fill in the subject, requester, description, and priority, and save.
+
+    Either way, your first ticket is now open and waiting for action.
+  </Step>
+
+  <Step title="Assign and respond">
+    With your first ticket open, close the loop:
+
+    1. Click **Assign** and select yourself (or another agent) as the assignee.
+    2. Set the **priority** (Low, Normal, High, or Urgent) based on the nature of the issue.
+    3. Write a reply in the response editor. You can use rich text, attach files, or add an **internal note** visible only to your team.
+    4. Click **Send Reply** — the response is delivered to the requester and the ticket status updates automatically.
+
+    Congratulations — you've completed your first full ticket workflow in SupportDesk.
   </Step>
 </Steps>
 
-<Tip>
-  Give people a way to get help. This could be a link to a support page, a chat with a customer support agent, or a forum for your product.
+## What to do next
 
-  Example: Need help? Reach out to us at [support@yourcompany.com](mailto:support@yourcompany.com).
-</Tip>
+Now that your workspace is live, explore the features that make SupportDesk powerful for complex support:
+
+- [Core Concepts](/core-concepts) — understand tickets, agents, queues, SLAs, and how they fit together.
+- [Triage & Routing](/tickets/triage-and-routing) — set up rules to automatically assign and prioritize incoming tickets.
+- [SLA Policies](/automation/sla-policies) — define response and resolution targets to keep your team accountable.

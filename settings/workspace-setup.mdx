@@ -1,0 +1,82 @@
+---
+title: "Workspace Setup and Configuration Guide"
+sidebarTitle: "Workspace Setup"
+description: "Configure your SupportDesk workspace: set your name, subdomain, branding, business hours, and default ticket settings for your support operation."
+---
+
+Your SupportDesk workspace is the central hub for your entire support operation. Before you invite agents, connect email, or configure automation, it's worth spending a few minutes setting up the workspace itself — your company name, subdomain, branding, and timezone all feed into how the product behaves and how it appears to your customers. This guide walks you through the key configuration areas available under **Settings → Workspace** and explains how each setting affects your day-to-day support workflow.
+
+## Initial Workspace Setup
+
+If you've just signed up, follow these steps to get your workspace configured before onboarding your team.
+
+<Steps>
+  <Step title="Set your workspace name and subdomain">
+    Go to **Settings → Workspace → Profile**. Enter your company or team name and choose a subdomain — for example, `acme` will give you `acme.supportdesk.io`. Your subdomain is used in your customer portal URL and in outbound email links.
+  </Step>
+  <Step title="Upload your logo">
+    Upload your company logo under **Workspace Logo**. Your logo appears in the top navigation bar, email notifications sent to customers, and the customer-facing portal. Use a PNG or SVG at least 200px wide for best results.
+  </Step>
+  <Step title="Set your timezone">
+    Choose your workspace timezone under **Settings → Workspace → Profile → Timezone**. This affects how timestamps are displayed throughout the app and how business hours are calculated for SLA purposes.
+  </Step>
+  <Step title="Configure business hours">
+    Go to **Settings → Workspace → Business Hours** and define your support team's operating hours. Business hours are used to pause SLA clocks outside of staffed periods.
+  </Step>
+  <Step title="Set default ticket settings">
+    Go to **Settings → Workspace → Ticket Defaults** and configure the default priority, auto-assign behavior, and default team for new tickets. These defaults apply to any ticket that doesn't match a more specific routing rule.
+  </Step>
+  <Step title="Invite your first agents">
+    Once your workspace is configured, head to **Settings → Agents** to invite your support team. See the [Agents & Roles](/settings/agents-and-roles) guide for details.
+  </Step>
+</Steps>
+
+## Workspace Profile
+
+The workspace profile controls how your support operation is identified internally and to customers.
+
+- **Workspace Name** — Displayed in the top navigation bar and in notification emails. Typically your company name or your support team's name.
+- **Subdomain** — Your workspace lives at `yoursubdomain.supportdesk.io`. The subdomain is set during signup and can only be changed by contacting support (see [Danger Zone](#danger-zone) below).
+- **Logo** — Your logo appears in the customer portal, outbound email templates, and the in-app header. Accepts PNG, JPG, or SVG.
+- **Timezone** — Sets the baseline timezone for all timestamp displays and business hours scheduling in your workspace.
+
+## Business Hours
+
+Business hours tell SupportDesk when your support team is actively working. This matters primarily for **SLA calculations** — when business hours are configured, SLA clocks pause outside of your defined hours so that a ticket opened at 11:45 PM on a Friday isn't immediately in breach when your team starts work Monday morning.
+
+- **Daily schedule** — Set start and end times for each day of the week. You can configure different hours per day or mark days as closed entirely.
+- **Custom schedules** — Create named schedules (e.g., "24/7 Engineering On-Call", "US Business Hours") and assign them to specific SLA policies.
+- **Holidays** — Add one-off holiday dates when your team is out of office. SLA clocks pause for the full calendar day on any configured holiday.
+
+Business hours are configured under **Settings → Workspace → Business Hours**.
+
+## Default Ticket Settings
+
+Default ticket settings apply to new tickets that don't match a more specific automation rule or routing policy.
+
+- **Default Priority** — The priority assigned to new tickets before an agent or rule updates it. Most teams set this to `Normal`.
+- **Auto-Assign Rule** — Choose whether new unassigned tickets are distributed automatically (round-robin across available agents) or left unassigned for manual triage.
+- **Default Team** — The team a new ticket is attributed to if no routing rule matches. Useful for ensuring every ticket has a clear owner.
+
+These settings are found under **Settings → Workspace → Ticket Defaults**.
+
+## Customer Portal
+
+The customer portal is an optional read-only interface where your customers can log in and view the status of their own open and resolved tickets. It's hosted at `yoursubdomain.supportdesk.io/portal`.
+
+- **Enable the portal** — Go to **Settings → Workspace → Customer Portal** and toggle it on. Customers receive a magic-link login email — no password required.
+- **Custom portal URL** — On the Growth and Enterprise plans, you can map a custom domain (e.g., `support.yourcompany.com`) to your customer portal using a CNAME DNS record.
+- **Portal visibility** — Customers can only see tickets where they are the requester or a CC'd follower. They cannot see other customers' tickets.
+- **Disable the portal** — If you prefer not to offer a self-service portal, you can leave it disabled. Customers will only receive ticket updates via email.
+
+## Danger Zone
+
+The following actions under **Settings → Workspace → Danger Zone** are permanent or have significant consequences. Proceed with caution.
+
+- **Rename workspace** — Changing your workspace name updates the display name across the app. Your subdomain does not change automatically. Contact SupportDesk support if you need to change your subdomain.
+- **Transfer ownership** — Transfers the Owner role to another admin in your workspace. The current owner is downgraded to Admin. This action cannot be undone without the new owner's cooperation.
+- **Delete workspace** — Permanently deletes your workspace, all tickets, agents, settings, and integrations. This action cannot be undone.
+
+<Warning>
+  Deleting your workspace is **irreversible**. All tickets, customer data, agent accounts, integrations, and configuration are permanently erased — there is no recovery path. If you're shutting down a workspace, export your ticket data first via **Settings → Data Export** and ensure all open tickets have been resolved or migrated. SupportDesk cannot restore deleted workspaces.
+</Warning>

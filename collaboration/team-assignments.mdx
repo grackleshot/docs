@@ -1,0 +1,134 @@
+---
+title: "Assign Tickets to Agents and Teams"
+sidebarTitle: "Team Assignments"
+description: "Assign support tickets to individual agents or entire teams in SupportDesk. Learn how to reassign, transfer, and use round-robin assignment to balance workloads."
+---
+
+Routing the right ticket to the right person is one of the most important levers you have for keeping resolution times short and customers satisfied. SupportDesk lets you assign tickets to a specific agent when accountability matters, or to an entire team when any qualified member can handle it. You can also let the platform distribute work automatically with round-robin assignment, and monitor workload balance across your team from a single dashboard view.
+
+## Assigning to an Agent
+
+Assigning a ticket to a specific agent makes that person the primary owner — they are responsible for driving the ticket to resolution and are notified of all customer activity on it.
+
+<Steps>
+  <Step title="Open the ticket">
+    Navigate to the ticket you want to assign.
+  </Step>
+  <Step title="Click the Assignee field">
+    In the right-hand sidebar, locate the **Assignee** field and click it. A search dropdown appears.
+  </Step>
+  <Step title="Search for the agent">
+    Start typing the agent's name or email address. Matching agents in your workspace appear in the list.
+  </Step>
+  <Step title="Select the agent">
+    Click the agent's name to assign the ticket. The assignee field updates immediately, and the agent receives a notification.
+  </Step>
+</Steps>
+
+## Assigning to a Team
+
+Team-level assignment is useful when a ticket belongs to a functional group but you don't yet know — or don't need to specify — which individual will handle it. Any agent in the team can see and claim team-assigned tickets from the shared team inbox.
+
+<Steps>
+  <Step title="Open the ticket sidebar">
+    From the open ticket, locate the **Team** field in the right-hand sidebar (directly above or below the Assignee field).
+  </Step>
+  <Step title="Click the Team field">
+    Click the field to open the team selector dropdown.
+  </Step>
+  <Step title="Select a team">
+    Choose the appropriate team from the list. The ticket immediately appears in that team's inbox view.
+  </Step>
+  <Step title="Leave Assignee blank (optional)">
+    You can assign to a team without specifying an individual agent. The ticket will remain in the team inbox until an agent claims it or it is manually assigned.
+  </Step>
+</Steps>
+
+<Tip>
+  Use **team assignment** for tickets that any qualified team member can resolve — for example, a general billing question routed to the Billing team. Use **agent assignment** when a ticket has a specific owner who has context, an ongoing relationship with the customer, or specialized knowledge required for that case.
+</Tip>
+
+## Unassigned Tickets
+
+Any ticket that has not been assigned to an agent or team lands in the **Unassigned** inbox, visible to all agents with access to the relevant inbox. Unassigned tickets are highlighted to draw attention, and the inbox shows a count badge so nothing gets overlooked.
+
+To claim an unassigned ticket:
+
+<Steps>
+  <Step title="Open the Unassigned inbox">
+    Click **Unassigned** in the left sidebar under your workspace's inbox list.
+  </Step>
+  <Step title="Open a ticket">
+    Click the ticket you want to take ownership of.
+  </Step>
+  <Step title="Assign it to yourself">
+    In the sidebar, click the **Assignee** field and select your own name, or click the **Claim** shortcut button that appears in the ticket header for unassigned tickets.
+  </Step>
+</Steps>
+
+## Round-Robin Assignment
+
+Round-robin assignment automatically distributes incoming tickets evenly across available agents in a team, rotating through the list so no single agent accumulates a disproportionate share of the queue.
+
+### Enabling Round-Robin
+
+<Steps>
+  <Step title="Go to Settings">
+    Click the gear icon in the bottom-left corner of SupportDesk to open **Settings**.
+  </Step>
+  <Step title="Navigate to Teams">
+    Select **Teams** from the left menu to see a list of all teams in your workspace.
+  </Step>
+  <Step title="Open the team settings">
+    Click the name of the team you want to configure.
+  </Step>
+  <Step title="Enable Round-Robin">
+    Toggle on **Round-Robin Assignment** under the Assignment section. You can also choose whether to skip agents who are currently set to **Away** status.
+  </Step>
+  <Step title="Save">
+    Click **Save Changes**. New tickets routed to this team will now be assigned automatically.
+  </Step>
+</Steps>
+
+<Note>
+  Round-robin only applies to **new** tickets routed to the team after the feature is enabled. Existing unassigned tickets in the team inbox are not retroactively distributed.
+</Note>
+
+## Reassigning a Ticket
+
+Circumstances change — an agent goes on leave, a ticket turns out to need different expertise, or a customer escalates and requires a senior responder. Reassigning a ticket takes just a few clicks.
+
+<Steps>
+  <Step title="Open the ticket">
+    Navigate to the ticket you want to reassign.
+  </Step>
+  <Step title="Click the current assignee">
+    In the sidebar, click the name shown in the **Assignee** field. The agent search dropdown reopens.
+  </Step>
+  <Step title="Select the new assignee">
+    Search for and select the new agent. The assignee field updates to show the new owner.
+  </Step>
+  <Step title="Add a handoff note (recommended)">
+    Switch to the **Internal Note** tab in the reply editor and leave a brief summary of the ticket's current status for the incoming agent. @mention them to ensure they see it immediately.
+  </Step>
+</Steps>
+
+<Warning>
+  The original assignee receives a notification when a ticket is reassigned away from them. If the reassignment is part of a sensitive escalation, consider adding an internal note to explain the context before making the change.
+</Warning>
+
+## Workload View
+
+Before assigning a new ticket, it helps to know who already has a full plate. The **Agents** dashboard gives you a real-time snapshot of each agent's open ticket count.
+
+<Steps>
+  <Step title="Open the Agents dashboard">
+    Click **Reports** in the left sidebar, then select **Agents** from the submenu.
+  </Step>
+  <Step title="Review open ticket counts">
+    The dashboard displays each agent's name, team, current status, and number of open tickets. Sort by **Open Tickets** to quickly identify who has capacity.
+  </Step>
+  <Step title="Drill into an agent">
+    Click an agent's name to see their full queue — useful when you need to understand the nature of their workload, not just the volume.
+  </Step>
+</Steps>

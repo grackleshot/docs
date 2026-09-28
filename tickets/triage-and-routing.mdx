@@ -1,0 +1,105 @@
+---
+title: "Ticket Triage and Intelligent Routing Rules"
+sidebarTitle: "Triage & Routing"
+description: "Configure SupportDesk triage rules to automatically assign, tag, and prioritize incoming tickets based on keywords, sender, custom fields, and other conditions."
+---
+
+Triage is the process of reviewing incoming tickets, understanding what they're about, and getting them to the right person as quickly as possible. In a low-volume, high-complexity support environment, triage isn't just about speed — it's about ensuring that every ticket arrives with the right priority, the right owner, and the right context so that nothing slips through the cracks. SupportDesk supports both manual triage for cases that require human judgment and automated routing rules for the patterns your team sees every day.
+
+## Manual Triage
+
+When a ticket arrives without a clear owner or priority, your triage agent reviews it and makes the necessary assignments before the ticket enters anyone's active queue.
+
+To manually triage a ticket, open it from the **Inbox** view. From the ticket's sidebar you can:
+
+- **Set priority** — Change the priority level based on the severity and urgency of the issue.
+- **Assign to an agent** — Select a specific agent from the **Assignee** dropdown. The agent receives a notification immediately.
+- **Assign to a team** — Route the ticket to a team instead of an individual when the right agent isn't yet clear. The ticket appears in that team's shared queue.
+- **Add tags** — Apply labels to categorize the ticket for reporting or future filtering.
+- **Update custom fields** — Fill in account details, affected components, or other context fields that the customer may not have provided at submission.
+
+Once triage is complete, update the status from **Open** to **In Progress** to signal that the ticket has been picked up.
+
+## Routing Rules
+
+Routing rules let you automate the triage decisions your team makes repeatedly. A routing rule defines a set of conditions — properties of an incoming ticket — and a set of actions to take when those conditions are met. Rules run automatically the moment a ticket is created.
+
+For example, you can create a rule that says: "If the requester's email domain is `enterprise-customer.com`, assign the ticket to the Enterprise Support team and set priority to High."
+
+## Rule Conditions
+
+Each rule can include one or more conditions. All conditions in a rule must match for the rule to trigger (AND logic). The following conditions are available:
+
+| Condition | Description |
+|---|---|
+| **Sender Email** | Matches the requester's full email address or domain (e.g., `@enterprise-customer.com`). |
+| **Subject Contains** | Matches a keyword or phrase in the ticket subject line (case-insensitive). |
+| **Priority** | Matches tickets already set to a specific priority level (e.g., `urgent`). Useful for chaining rules. |
+| **Custom Field Value** | Matches any custom field on the ticket, such as `account_plan = Enterprise` or `affected_component = Database`. |
+| **Channel** | Matches the ticket source: `email`, `web_form`, or `api`. |
+| **Tag** | Matches a tag already present on the ticket. |
+| **Description Contains** | Matches a keyword or phrase in the ticket description body. |
+
+## Rule Actions
+
+When a rule's conditions are met, SupportDesk executes all of its configured actions simultaneously:
+
+| Action | Description |
+|---|---|
+| **Assign to Agent** | Sets a specific agent as the ticket assignee. |
+| **Assign to Team** | Routes the ticket to a team queue. |
+| **Set Priority** | Overrides the ticket's current priority with a new value (Low, Normal, High, or Urgent). |
+| **Add Tag** | Applies one or more tags to the ticket. |
+| **Set Status** | Changes the ticket status (e.g., automatically move to In Progress on assignment). |
+| **Send Notification** | Sends a Slack message, email, or webhook payload to a specified destination. |
+| **Set Custom Field** | Writes a value into a custom field on the ticket. |
+
+## Rule Priority Order
+
+SupportDesk evaluates your routing rules in the order they appear in **Settings → Routing Rules**. The first rule whose conditions fully match an incoming ticket is applied, and evaluation stops — no subsequent rules are checked for that ticket.
+
+This means rule order matters. Place your most specific rules at the top and your most general catch-all rules at the bottom.
+
+<Warning>
+  Conflicting rules can cause unexpected routing behavior. If two rules could both match the same ticket — for example, one matching on sender domain and another matching on subject keyword — the rule listed higher in the list will always win. Review your rule order carefully after adding new rules, and use the **Test Rule** feature (available when editing a rule) to simulate how an incoming ticket would be handled.
+</Warning>
+
+## Example: Route All Enterprise Tickets to the Enterprise Support Team
+
+Here's a common routing rule that assigns any ticket from an Enterprise customer to the dedicated Enterprise Support team and elevates the priority.
+
+**Conditions:**
+- Custom Field Value: `account_plan` equals `Enterprise`
+
+**Actions:**
+- Assign to Team: `Enterprise Support`
+- Set Priority: `High`
+- Add Tag: `enterprise`
+
+## Creating a Routing Rule
+
+<Steps>
+  <Step title="Open Routing Rules settings">
+    Go to **Settings → Routing Rules** and click **+ New Rule**.
+  </Step>
+  <Step title="Name your rule">
+    Give the rule a descriptive name so your team understands its purpose at a glance — for example, "Enterprise tickets → Enterprise Support team".
+  </Step>
+  <Step title="Add conditions">
+    Click **+ Add Condition** and select the condition type from the dropdown. Set the operator (equals, contains, starts with) and the value to match. Add additional conditions as needed.
+  </Step>
+  <Step title="Add actions">
+    Click **+ Add Action** and select what SupportDesk should do when the rule matches. Add as many actions as the rule requires.
+  </Step>
+  <Step title="Set rule position">
+    Use the drag handle to position the rule correctly in the evaluation order relative to your other rules.
+  </Step>
+  <Step title="Save and activate">
+    Click **Save Rule**. The rule becomes active immediately and applies to all new tickets going forward. Existing tickets are not retroactively affected.
+  </Step>
+</Steps>
+
+## Next Steps
+
+- [Statuses & Workflows](/tickets/statuses-and-workflows) — Configure how tickets move through your support process after triage.
+- [Overview](/tickets/overview) — Review the full ticket anatomy and field reference.

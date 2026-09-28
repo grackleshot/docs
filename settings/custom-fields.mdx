@@ -1,0 +1,112 @@
+---
+title: "Custom Ticket Fields for Technical Context"
+sidebarTitle: "Custom Fields"
+description: "Add custom fields to SupportDesk tickets to capture technical details specific to your SaaS product — account ID, environment, affected component, and more."
+---
+
+Out-of-the-box ticket fields like subject, priority, and status are a starting point — but for SaaS teams handling high-complexity technical issues, they're rarely enough. When an agent opens a ticket, they often need to know which account is affected, what environment the issue occurred in, what version of your product the customer is running, and which component failed. Custom fields let you capture that structured context at the point of ticket creation, so your agents have everything they need before they even start reading the conversation thread. Well-designed custom fields also unlock more precise routing rules, SLA policies, and reporting.
+
+## Field Types
+
+SupportDesk supports the following custom field types. Choose the type that matches the kind of data you want to capture.
+
+| Field Type | Description |
+|---|---|
+| **Text** (single-line) | Free-text input for short values like an account ID, username, or order number |
+| **Textarea** (multi-line) | Longer free-text for pasting log snippets, configuration blocks, or error messages |
+| **Dropdown** | A single-select list of predefined options — ideal for categorizing tickets (e.g., Environment: Production / Staging / Dev) |
+| **Multi-select** | A list where multiple values can be selected — useful for tagging multiple affected features or components |
+| **Number** | A numeric input field — useful for version numbers, port numbers, or record counts |
+| **Date** | A date picker — useful for capturing when an issue first occurred or a deadline |
+| **Checkbox** | A boolean true/false toggle — useful for binary flags like "Reproduced internally" or "Customer on paid plan" |
+
+## Creating a Custom Field
+
+<Steps>
+  <Step title="Open custom field settings">
+    Go to **Settings → Custom Fields** in your SupportDesk workspace.
+  </Step>
+  <Step title="Click New Field">
+    Click the **New Field** button in the top right corner.
+  </Step>
+  <Step title="Choose a field type">
+    Select the field type from the dropdown (see [Field Types](#field-types) above). The field type cannot be changed after the field is saved.
+  </Step>
+  <Step title="Enter the field label and key">
+    - **Label** — The human-readable name displayed to agents and customers in the ticket form (e.g., "Affected Environment").
+    - **Key** — The API identifier used when creating or updating tickets programmatically (e.g., `affected_environment`). Keys are lowercase, use underscores, and cannot be changed after saving.
+  </Step>
+  <Step title="Configure options (for Dropdown and Multi-select)">
+    If you selected Dropdown or Multi-select, add the list of options in the **Options** section. You can add, reorder, and remove options at any time after the field is created.
+  </Step>
+  <Step title="Set required or optional">
+    Toggle **Required** on if the field must be filled before a ticket can be submitted. Leave it off if the field is informational and optional.
+  </Step>
+  <Step title="Save the field">
+    Click **Save Field**. The field will immediately appear in the ticket sidebar for all tickets going forward. It does not retroactively populate on existing tickets.
+  </Step>
+</Steps>
+
+## Using Custom Fields in Tickets
+
+Custom fields appear in the **ticket sidebar** on the right side of every ticket detail page. Agents can view and edit field values directly from the sidebar without navigating away from the conversation.
+
+- **Required fields** — If a custom field is marked required, it must be filled in before the ticket can be submitted (via the web form or customer portal) or before an agent can mark the ticket as resolved, depending on your configuration.
+- **Field visibility** — You can configure whether a field is visible to customers (in the web form or portal) or internal-only (visible only to agents).
+- **Editing values** — Agents can update custom field values at any time during the ticket lifecycle. Each change is logged in the ticket's activity timeline.
+
+## Required vs. Optional
+
+The distinction between required and optional fields has a meaningful impact on ticket quality and agent efficiency.
+
+**Use required fields** for information that is critical to diagnosing or resolving a ticket and that the customer or submitter can always provide — for example, Account ID, Environment, or Affected Feature. Requiring these at submission time means agents never need to send a "can you tell me your account ID?" reply before they can start working.
+
+**Use optional fields** for context that is helpful when available but can't always be provided upfront — for example, an Error Code that only appears in certain failure scenarios, or a SaaS Version that the customer may not know offhand.
+
+A good rule of thumb: if missing the field would cause an agent to send a follow-up question in more than 80% of tickets, make it required.
+
+## Using Fields in Automation
+
+Custom field values can be used as conditions in **routing rules** and **SLA policies**, giving you fine-grained control over how tickets are handled based on their technical context.
+
+Examples:
+- Route any ticket where `environment` = `Production` to the Senior Engineering team and apply a 1-hour SLA
+- Apply a "Critical Account" SLA policy to tickets where `account_plan` = `Enterprise`
+- Automatically assign tickets where `affected_feature` = `API` to your API team
+
+To use a custom field in automation, go to **Settings → Routing Rules** or **Settings → SLA Policies** and select your field from the condition dropdown.
+
+## Field Keys and the API
+
+Every custom field has a **key** — a stable, lowercase identifier you define when creating the field. Field keys are used when creating or updating tickets via the SupportDesk REST API.
+
+For example, to create a ticket with a custom `environment` field set to `production`, your API request body would include:
+
+```json
+{
+  "subject": "Login failure on production",
+  "custom_fields": {
+    "environment": "production",
+    "account_id": "ACC-00482"
+  }
+}
+```
+
+Field keys are shown in **Settings → Custom Fields** next to each field label. They cannot be changed after the field is created, so choose keys that are stable and descriptive.
+
+## Suggested Custom Fields for SaaS Support
+
+If you're not sure where to start, here are custom field suggestions commonly used by SaaS support teams:
+
+| Field Label | Key | Type | Required? |
+|---|---|---|---|
+| Account ID | `account_id` | Text | ✅ Yes |
+| Account Plan | `account_plan` | Dropdown | Optional |
+| Affected Feature | `affected_feature` | Multi-select | Optional |
+| Environment | `environment` | Dropdown (Production / Staging / Dev) | ✅ Yes |
+| SaaS Version | `saas_version` | Text | Optional |
+| Error Code | `error_code` | Text | Optional |
+
+<Tip>
+  Make **Account ID** a required field on every ticket. When an agent can immediately look up the account in your CRM, billing system, or internal admin panel, they start every ticket with the full customer context — contract tier, recent activity, previous issues — rather than spending the first message just figuring out who they're talking to.
+</Tip>

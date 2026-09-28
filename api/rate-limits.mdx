@@ -1,0 +1,95 @@
+---
+title: "API Rate Limits and Request Throttling"
+sidebarTitle: "Rate Limits"
+description: "SupportDesk API rate limits: 1,000 requests per minute per workspace on Growth and Enterprise plans. Learn how to handle 429 errors and implement backoff."
+---
+
+SupportDesk enforces rate limits on the API to ensure consistent performance across all workspaces. Limits are applied on a rolling one-minute window and are scoped to your workspace — not to individual API keys. If you build multiple integrations that share the same workspace, their requests count against the same limit. Understanding your plan's limit and designing your integration to handle throttling gracefully will keep your systems resilient.
+
+## Rate Limit by Plan
+
+| Plan | Requests per Minute |
+|---|---|
+| **Starter** | 100 |
+| **Growth** | 1,000 |
+| **Enterprise** | 5,000 (custom limits available) |
+
+If you need a higher limit than your plan provides — for example, during a large data migration or a high-volume event-driven integration — contact [support@supportdesk.io](mailto:support@supportdesk.io) to discuss a temporary or permanent limit increase.
+
+## Rate Limit Headers
+
+Every API response includes headers that tell you exactly where you stand in the current rate limit window:
+
+| Header | Description |
+|---|---|
+| `X-RateLimit-Limit` | The total number of requests allowed per minute for your workspace under your current plan. |
+| `X-RateLimit-Remaining` | The number of requests you have remaining in the current one-minute window. |
+| `X-RateLimit-Reset` | A Unix timestamp (in seconds) indicating when the current window resets and your full limit is restored. |
+
+You can use these headers to implement proactive throttling in your integration — for example, slowing down request dispatch when `X-RateLimit-Remaining` drops close to zero, rather than waiting to hit a `429`.
+
+## Handling 429 Errors
+
+When you exceed your rate limit, the API returns a `429 Too Many Requests` response with a `Retry-After` header:
+
+```http
+HTTP/1.1 429 Too Many Requests
+Retry-After: 14
+X-RateLimit-Limit: 1000
+X-RateLimit-Remaining: 0
+X-RateLimit-Reset: 1717200060
+
+{
+  "error": {
+    "code": "rate_limit_exceeded",
+    "message": "You have exceeded your plan's rate limit. Retry after 14 seconds."
+  }
+}
+```
+
+The `Retry-After` value is in seconds. You must wait at least this long before retrying the request.
+
+## Retry Strategy
+
+A simple retry-on-429 loop can run into trouble if multiple requests hit the limit simultaneously. Exponential backoff spreads retries out over time, reducing the chance of thundering-herd behavior. Here's a JavaScript implementation you can adapt:
+
+```javascript
+async function requestWithRetry(url, options, maxRetries = 3) {
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    const response = await fetch(url, options);
+
+    if (response.status !== 429) return response;
+
+    const retryAfter = parseInt(response.headers.get('Retry-After') || '1', 10);
+    const backoffMs = retryAfter * 1000 * Math.pow(2, attempt);
+
+    console.warn(`Rate limited. Retrying in ${backoffMs}ms (attempt ${attempt + 1}/${maxRetries})`);
+    await new Promise(resolve => setTimeout(resolve, backoffMs));
+  }
+
+  throw new Error('Max retries exceeded');
+}
+
+// Usage
+const response = await requestWithRetry(
+  'https://api.supportdesk.io/v1/tickets',
+  {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Bearer sk_live_abc123xyz',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ subject: 'New ticket', description: '...', requester_email: 'user@example.com' }),
+  }
+);
+```
+
+On the first retry, the backoff is `retryAfter * 1` second; on the second, `retryAfter * 2` seconds; on the third, `retryAfter * 4` seconds. Adjust `maxRetries` based on how critical the operation is and how long you're willing to wait.
+
+<Tip>
+  If you're performing bulk operations — such as importing a backlog of tickets from another system — schedule the requests during off-peak hours and introduce artificial delays between requests (e.g., 100ms between each call). This keeps you well below the rate limit and avoids disruptive bursts that could interfere with real-time support activity.
+</Tip>
+
+<Note>
+  Rate limits are enforced per workspace, not per API key. All keys belonging to the same workspace share the same request budget. If you have multiple integrations running in parallel — for example, a Zapier integration and a custom webhook consumer — their combined traffic counts toward your single workspace limit.
+</Note>

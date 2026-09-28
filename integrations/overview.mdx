@@ -1,0 +1,59 @@
+---
+title: "SupportDesk Integrations: Connect Your Existing Tools"
+sidebarTitle: "Overview"
+description: "Connect SupportDesk to your email, Slack, and developer tooling. Explore available integrations and learn how to set up each channel and service."
+---
+
+SupportDesk integrations let your team bring support context into the tools you already use — and push ticket activity out to the systems that power your product. Instead of jumping between your inbox, a chat app, and a separate ticketing tool, you can centralize every customer conversation, escalation, and resolution in one place. Whether you're routing inbound email to tickets, firing Slack alerts when SLAs are at risk, or building a custom integration with webhooks, SupportDesk connects to the infrastructure your SaaS team depends on.
+
+## Available Integrations
+
+<CardGroup cols={2}>
+  <Card title="Email" icon="envelope" href="/integrations/email">
+    Turn every inbound support email into a tracked ticket. Configure forwarding or MX records to connect your existing support address.
+  </Card>
+  <Card title="Slack" icon="slack" href="/integrations/slack">
+    Receive real-time ticket notifications, SLA warnings, and escalation alerts directly in your team's Slack channels.
+  </Card>
+  <Card title="Webhooks" icon="webhook" href="/integrations/webhooks">
+    Subscribe to ticket lifecycle events and receive HTTP POST payloads to build custom integrations with your own internal tools.
+  </Card>
+  <Card title="REST API" icon="code" href="/api/introduction">
+    Programmatically create, update, and query tickets using the SupportDesk REST API. Full OpenAPI spec available.
+  </Card>
+</CardGroup>
+
+## Integration Categories
+
+### Communication Channels
+
+Communication channel integrations are the primary way tickets enter SupportDesk. Every message your customers send — whether through email or a web form — is converted into a ticket with a requester, subject, and conversation thread.
+
+- **Email** — Connect your support address (e.g., `support@yourcompany.com`) using email forwarding or MX records. Replies thread back into the same ticket automatically.
+- **Web Form** — Embed a customizable support form on your website or help center. Submissions create tickets with structured fields for faster triage.
+
+### Collaboration Tools
+
+Collaboration integrations keep your internal team informed without requiring them to stay logged into SupportDesk all day.
+
+- **Slack** — Route ticket events to specific Slack channels. Get notified when a new ticket arrives, an SLA is about to breach, or a critical escalation is triggered.
+
+### Developer Integrations
+
+Developer integrations are designed for teams that want to extend SupportDesk or connect it to proprietary tooling.
+
+- **Webhooks** — Subscribe to real-time ticket events and receive structured JSON payloads at any HTTPS endpoint you control.
+- **REST API** — Create and manage tickets, agents, teams, and custom fields programmatically. Useful for building customer-facing portals, internal dashboards, or automated ticket creation from your product.
+
+## All Integrations at a Glance
+
+| Integration | Type | What It Does |
+|---|---|---|
+| [Email](/integrations/email) | Communication Channel | Converts inbound emails into tickets; threads replies back into the conversation |
+| [Slack](/integrations/slack) | Collaboration Tool | Sends ticket notifications and SLA alerts to Slack channels |
+| [Webhooks](/integrations/webhooks) | Developer Integration | POSTs real-time JSON payloads to your endpoint on ticket events |
+| [REST API](/api/introduction) | Developer Integration | Full programmatic access to tickets, agents, teams, and settings |
+
+## Getting Started
+
+Navigate to **Settings → Integrations** in your SupportDesk workspace to connect any of the integrations above. Each integration has its own configuration page where you can manage credentials, notification preferences, and routing rules.

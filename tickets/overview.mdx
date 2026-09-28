@@ -1,0 +1,64 @@
+---
+title: "Ticket Management Overview in SupportDesk"
+sidebarTitle: "Overview"
+description: "An overview of how SupportDesk manages support tickets — from submission through resolution, with rich context, custom fields, and full communication history."
+---
+
+Every support interaction in SupportDesk lives inside a ticket. From the moment a customer submits a request to the moment your team marks it resolved, a ticket captures the full context of the issue — who reported it, what happened, how your team responded, and what it took to close it. For support teams handling low-volume, high-complexity cases, this complete picture is what separates a great support experience from a frustrating one.
+
+## The Ticket Lifecycle
+
+A ticket moves through a defined set of states from creation to closure. When a customer submits a request — through email, the web form, or your API integration — SupportDesk creates a ticket and places it in the **Open** queue. Your team triages it, assigns ownership, and works toward resolution through a back-and-forth with the requester. Once the issue is resolved, the ticket moves to **Resolved** and eventually to **Closed**. Every step of that journey is logged in the ticket's timeline.
+
+For a detailed breakdown of each status and how to configure custom workflow stages, see [Statuses & Workflows](/tickets/statuses-and-workflows).
+
+## What a Ticket Contains
+
+Each ticket in SupportDesk is a rich record, not just a message thread. The following fields are available on every ticket:
+
+| Field | Description |
+|---|---|
+| **Subject** | A concise title summarizing the issue, entered by the requester or parsed from an email subject line. |
+| **Description** | The full body of the request, including any initial context, steps to reproduce, or error messages provided by the customer. |
+| **Requester** | The customer or user who submitted the ticket, identified by name and email address. |
+| **Assignee** | The agent or team member currently responsible for resolving the ticket. |
+| **Team** | The support team the ticket is routed to (e.g., Enterprise Support, Billing, Infrastructure). |
+| **Status** | The current stage in the ticket lifecycle: Open, In Progress, Pending Customer, Resolved, or Closed. |
+| **Priority** | The urgency level — Low, Normal, High, or Urgent — used to rank tickets in the queue. |
+| **Channel** | The source through which the ticket was submitted: Email, Web Form, or API. |
+| **Custom Fields** | Configurable fields defined by your organization, such as Account Plan, Affected Component, or Product Area. |
+| **Attachments** | Files, screenshots, logs, or other supporting documents uploaded by the requester or your team. |
+| **Tags** | Labels applied manually or by routing rules to categorize and filter tickets. |
+| **Timeline** | A full, chronological log of all activity on the ticket — replies, status changes, assignments, and internal notes. |
+| **Created At** | The timestamp when the ticket was first submitted. |
+| **Updated At** | The timestamp of the most recent activity on the ticket. |
+| **SLA Due Date** | The deadline calculated from your SLA policy, based on priority and creation time. |
+
+## Ticket Sources
+
+SupportDesk accepts tickets from three channels. Regardless of how a ticket arrives, it lands in the same unified queue and has the same fields available.
+
+### Email
+
+Customers can send an email to your team's support address (e.g., `support@yourcompany.com`). SupportDesk automatically parses the email subject as the ticket subject and the email body as the description. Subsequent replies in the same email thread are appended to the ticket's timeline, keeping the full conversation in one place.
+
+### Web Form
+
+You can embed a customizable support form on your website or in your product. The form maps directly to ticket fields — including any custom fields you've defined — so customers provide exactly the information your team needs before the first reply.
+
+### API
+
+Your application or internal tooling can create tickets programmatically via the SupportDesk REST API. This is useful for automated alerting, internal escalations, or integrations with other systems. See [Creating Tickets](/tickets/creating-tickets) for an example API request.
+
+## Ticket Anatomy at a Glance
+
+A ticket is organized into three visual areas in the SupportDesk interface:
+
+- **Header** — Subject, status badge, priority indicator, and ticket ID. This is visible at all times and gives your team an instant summary.
+- **Conversation Panel** — The main body of the ticket, showing the original description followed by all replies and internal notes in chronological order. Internal notes are visible only to your team and are highlighted in a distinct color.
+- **Sidebar** — All metadata fields: requester details, assignee, team, channel, custom fields, tags, SLA status, and attachments. Agents update fields here without interrupting the conversation flow.
+
+## Next Steps
+
+- [Creating Tickets](/tickets/creating-tickets) — Learn how to create tickets manually, by email, or via the API.
+- [Triage & Routing](/tickets/triage-and-routing) — Set up automated rules to assign, prioritize, and tag incoming tickets.

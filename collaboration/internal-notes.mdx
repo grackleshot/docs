@@ -1,0 +1,118 @@
+---
+title: "Internal Notes: Collaborate Behind the Scenes"
+sidebarTitle: "Internal Notes"
+description: "Use internal notes in SupportDesk to share context, debugging findings, and escalation details with teammates — invisible to the customer and preserved forever in the ticket."
+---
+
+Internal notes are private messages that live inside a ticket and are visible only to your team. For complex technical support cases — multi-step debugging sessions, escalations involving multiple engineers, or tickets that span days or weeks — internal notes give your team a shared scratchpad to document findings, decisions, and open questions without any risk of the customer seeing half-finished thoughts or raw diagnostic data. Every note is timestamped, attributed to an author, and permanently attached to the ticket, so the full investigation trail is always one scroll away.
+
+## Adding an Internal Note
+
+From any open ticket, you write internal notes from the same area you use to send customer replies.
+
+<Steps>
+  <Step title="Open the reply area">
+    Scroll to the bottom of the ticket thread and locate the text editor panel.
+  </Step>
+  <Step title="Switch to Internal Note">
+    Click the **Internal Note** tab at the top of the editor. The editor background changes to a soft yellow to clearly distinguish it from a customer-facing reply.
+  </Step>
+  <Step title="Write your note">
+    Compose your note using the full rich-text editor. You can format text, add code blocks, attach files, and @mention teammates.
+  </Step>
+  <Step title="Submit the note">
+    Click **Add Note** to save it to the ticket. The note appears in the ticket timeline with a lock icon to indicate it is internal-only.
+  </Step>
+</Steps>
+
+## What Internal Notes Can Contain
+
+Internal notes support everything you need to communicate complex technical context clearly.
+
+<CardGroup cols={2}>
+  <Card title="Formatted Text" icon="text">
+    Use bold, italic, bullet lists, numbered lists, and headings to structure your findings in a readable way.
+  </Card>
+  <Card title="Code Blocks" icon="code">
+    Paste logs, stack traces, config files, or command output into fenced code blocks with syntax highlighting.
+  </Card>
+  <Card title="File Attachments" icon="paperclip">
+    Attach screenshots, HAR files, crash dumps, or any other supporting file directly to the note.
+  </Card>
+  <Card title="@Mentions" icon="at">
+    Tag a teammate with @ to pull them into the ticket and send them an immediate notification.
+  </Card>
+</CardGroup>
+
+## Code Snippet Support
+
+Internal notes fully support fenced code blocks, making them ideal for sharing technical artifacts during an investigation. To insert a code block, click the **Code Block** button in the editor toolbar or type triple backticks followed by a language identifier.
+
+For example, you might paste a Python stack trace like this:
+
+````
+```python
+Traceback (most recent call last):
+  File "worker.py", line 42, in process_job
+    result = run_task(payload)
+  File "tasks.py", line 17, in run_task
+    raise ValueError(f"Invalid payload key: {key}")
+ValueError: Invalid payload key: user_id
+```
+````
+
+Code blocks are rendered with a monospace font and a copy button so teammates can grab the content instantly. You can use any language identifier supported by your editor's syntax highlighter.
+
+## Pinned Notes
+
+When a ticket has a key piece of context that every responder needs to see immediately — such as a known account quirk, an active incident reference, or a critical escalation detail — you can pin an internal note to the top of the ticket.
+
+<Steps>
+  <Step title="Locate the note">
+    Find the internal note you want to pin in the ticket timeline.
+  </Step>
+  <Step title="Open the note menu">
+    Hover over the note and click the **⋯** (more options) icon that appears in the top-right corner of the note.
+  </Step>
+  <Step title="Pin the note">
+    Select **Pin Note** from the dropdown. The note immediately moves to a highlighted banner at the top of the ticket, above the conversation thread.
+  </Step>
+  <Step title="Unpin when no longer needed">
+    Repeat the same steps and select **Unpin Note** to return it to its original position in the timeline.
+  </Step>
+</Steps>
+
+Only one note can be pinned per ticket at a time. Pinning a new note automatically unpins the previous one.
+
+<Note>
+  Internal notes are **never visible to the customer** — not in email threads, not in the customer portal, and not in any ticket export shared externally. Even if a customer has portal access and can view the ticket, they will only see customer-facing replies.
+</Note>
+
+## Documenting the Investigation Trail
+
+For complex bugs or multi-day incidents, treat internal notes as a living engineering log. Each time you try something new — run a query, check a log, reproduce a step — leave a quick note recording what you did and what you found. This habit pays dividends when you hand off to a colleague mid-investigation or when a similar ticket arrives months later.
+
+<Tip>
+  Use internal notes to document your investigation trail as you go, not just at the end. A note that says "Checked DB logs at 14:32 UTC — no errors found, narrowing to app layer" takes ten seconds to write and saves the next responder from repeating the same work.
+</Tip>
+
+## Searching Internal Notes
+
+Internal notes are indexed by SupportDesk's full-text search, so you can find past findings without remembering which ticket they were attached to.
+
+To search within internal notes:
+
+<Steps>
+  <Step title="Open Global Search">
+    Press **⌘K** (Mac) or **Ctrl+K** (Windows/Linux) to open the global search bar, or click the search icon in the left sidebar.
+  </Step>
+  <Step title="Enter your query">
+    Type the keyword, error message, or phrase you're looking for. Internal note content is included in results alongside ticket titles and customer messages.
+  </Step>
+  <Step title="Filter to notes only">
+    Use the **Type** filter and select **Internal Notes** to narrow results to notes exclusively, which is useful when searching for a specific log snippet or config value a teammate documented previously.
+  </Step>
+  <Step title="Open the result">
+    Click any result to jump directly to the ticket, with the matching note highlighted in the timeline.
+  </Step>
+</Steps>

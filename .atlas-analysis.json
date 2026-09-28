@@ -1,13 +1,11 @@
 {
-  "$schema": "https://mintlify.com/docs.json",
+  "projectType": "saas",
+  "projectName": "SupportDesk",
+  "projectDescription": "A modern support ticketing platform built for SaaS teams handling low-volume, high-complexity technical and customer support cases.",
   "theme": "almond",
-  "name": "SupportDesk",
-  "colors": {
-    "primary": "#ef7025",
-    "light": "#eec9bc",
-    "dark": "#4fa1ab"
-  },
-  "favicon": "/favicon.svg",
+  "primaryColor": "#ef7025",
+  "lightColor": "#eec9bc",
+  "darkColor": "#4fa1ab",
   "navigation": {
     "tabs": [
       {
@@ -93,23 +91,30 @@
       }
     ]
   },
-  "navbar": {
-    "links": [
-      {
-        "label": "Contact Support",
-        "href": "mailto:support@supportdesk.io"
-      }
-    ],
-    "primary": {
-      "type": "button",
-      "label": "Sign In",
-      "href": "https://app.supportdesk.io"
-    }
-  },
-  "footer": {
-    "socials": {
-      "x": "https://x.com/supportdesk",
-      "linkedin": "https://linkedin.com/company/supportdesk"
-    }
-  }
+  "keyFeatures": [
+    "Unified ticket inbox for email, chat, and web submissions",
+    "Intelligent triage and routing rules for complex technical cases",
+    "Rich internal notes and threaded collaboration for support agents",
+    "SLA policies and escalation workflows",
+    "Customizable ticket fields for capturing detailed technical context",
+    "Canned responses and knowledge base suggestions",
+    "Webhook and API integrations with developer tooling",
+    "Role-based access control for agents and teams",
+    "Merge and link related tickets to reduce duplication",
+    "Customer communication timeline with full history"
+  ],
+  "publicApiSurface": [
+    "GET /tickets",
+    "POST /tickets",
+    "GET /tickets/:id",
+    "PATCH /tickets/:id",
+    "DELETE /tickets/:id",
+    "POST /tickets/:id/comments",
+    "GET /tickets/:id/comments",
+    "GET /users",
+    "POST /users",
+    "GET /webhooks",
+    "POST /webhooks",
+    "DELETE /webhooks/:id"
+  ]
 }

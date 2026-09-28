@@ -1,0 +1,118 @@
+---
+title: "Canned Responses: Save and Reuse Reply Templates"
+sidebarTitle: "Canned Responses"
+description: "Create and use canned responses in SupportDesk to quickly insert pre-written reply templates for common questions, without sacrificing quality or personalization."
+---
+
+Even in high-complexity support environments, many replies follow familiar patterns — acknowledging a bug report, requesting reproduction steps, confirming a refund has been processed. Canned responses let you save those patterns as templates and insert them into any ticket reply in seconds. You keep the quality high, reduce typing time, and ensure consistent messaging across your team — while still having room to personalize each reply before sending.
+
+## What Are Canned Responses
+
+A canned response is a saved text snippet — a full reply or a partial message fragment — that any agent can insert into the reply composer with a single action. Canned responses support **template variables**, which are automatically filled with real ticket and customer data when inserted, so the output reads like a personalized reply rather than a form letter.
+
+You can scope canned responses as **shared** (available to all agents) or **personal** (visible only to you), and organize them into categories for fast searching.
+
+## Creating a Canned Response
+
+<Steps>
+  <Step title="Go to Canned Responses Settings">
+    Navigate to **Settings > Canned Responses** and click **New Canned Response**.
+  </Step>
+  <Step title="Write a Clear Title">
+    Give your canned response a short, searchable title. Agents search by title when inserting a response, so be specific: `"Bug report acknowledged — requesting repro steps"` is more useful than `"Bug"`.
+  </Step>
+  <Step title="Write the Response Body">
+    Write the full reply text in the body field. Use plain text or basic markdown formatting. Where appropriate, insert template variables (see the table below) so the response personalizes automatically on insert.
+  </Step>
+  <Step title="Assign a Category">
+    Select an existing category (e.g., `Billing`, `Technical`, `Onboarding`) or create a new one. Categories appear as filters when agents search for responses in the reply box.
+  </Step>
+  <Step title="Set Visibility">
+    Choose **Public** to share the response with all agents, or **Private** to keep it for personal use only. Admins can manage and edit all public responses.
+  </Step>
+  <Step title="Save">
+    Click **Save Canned Response**. It is immediately available to insert in any ticket reply.
+  </Step>
+</Steps>
+
+## Template Variables
+
+Template variables are placeholders that SupportDesk automatically replaces with live data when the canned response is inserted. Use them freely — they make your responses feel personal without adding manual effort.
+
+| Variable | Description |
+|---|---|
+| `{{customer.name}}` | Customer's full name |
+| `{{customer.email}}` | Customer's email address |
+| `{{ticket.id}}` | Unique ticket ID (e.g., `#4821`) |
+| `{{ticket.subject}}` | The subject line of the ticket |
+| `{{agent.name}}` | Full name of the agent inserting the response |
+| `{{agent.title}}` | Job title of the agent inserting the response |
+
+If a variable can't be resolved — for example, the customer's name is missing from their profile — SupportDesk leaves the field blank rather than inserting the raw placeholder, so you'll want to review the reply before sending.
+
+## Using a Canned Response
+
+You don't need to leave the reply composer to insert a canned response:
+
+1. Click into the reply box on any ticket.
+2. Type `/` to open the canned response search palette.
+3. Start typing the title of the response you want — results filter in real time.
+4. Click the response (or press **Enter**) to insert it. Variables are substituted automatically.
+5. Review the inserted text, make any personalizations, and send.
+
+The entire process takes a few seconds. Agents who learn the keyboard-first workflow — type `/`, type a few letters of the title, hit Enter — find that canned responses fit naturally into their reply rhythm rather than interrupting it.
+
+## Organizing Responses
+
+As your library grows, good organization becomes critical. SupportDesk lets you create **categories** to group related responses — for example:
+
+- `Billing` — refund confirmations, payment issue acknowledgments, subscription changes
+- `Technical` — bug acknowledgments, repro step requests, escalation notices
+- `Onboarding` — welcome messages, setup guides, trial extension offers
+- `General` — closings, follow-up check-ins, satisfaction survey invites
+
+When an agent types `/` in the reply box, they can filter by category before searching by title. This helps agents on large teams find the right response even if they can't remember the exact title.
+
+## Shared vs. Personal Responses
+
+| Type | Visibility | Who Can Edit |
+|---|---|---|
+| **Public** | All agents across the workspace | Any agent (subject to admin approval settings) |
+| **Private** | Only the agent who created it | The creating agent only |
+
+Personal canned responses are useful for agents who have developed their own communication style or work a specialized account list. Public responses are ideal for team-wide consistency on common scenarios — and admins can periodically audit and update them to keep messaging current.
+
+<Tip>
+  The most effective canned responses strike a balance: specific enough to save real writing time, but open-ended enough to invite customization. A response that says *"We've confirmed the issue on our end and are investigating — `{{agent.name}}` will follow up with an update within 2 hours"* is immediately useful and easy to personalize. A response that says *"Thanks for contacting us"* is too generic to add value.
+</Tip>
+
+## Example: Technical Acknowledgment Response
+
+Here's an example of a well-structured canned response for acknowledging a bug report:
+
+---
+
+**Title:** `Bug report received — investigating`
+
+**Category:** `Technical`
+
+**Body:**
+
+```
+Hi {{customer.name}},
+
+Thanks for writing in — I'm sorry to hear you're running into this. I've reviewed your report for ticket {{ticket.id}} and I'm looking into it now.
+
+To help me reproduce the issue on our end, could you share:
+- The steps you took leading up to the error
+- Any error messages or screenshots you're seeing
+- The browser and OS version you're using (if applicable)
+
+I'll follow up as soon as I have more information. You're in good hands.
+
+— {{agent.name}}, {{agent.title}}
+```
+
+---
+
+This template does everything a good first response should: it acknowledges the issue, sets expectations, asks for the right information, and closes on a reassuring note — all in under 30 seconds of the agent's time.

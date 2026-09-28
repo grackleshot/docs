@@ -1,0 +1,127 @@
+---
+title: "Webhooks: Real-Time Ticket Events for Your Systems"
+sidebarTitle: "Webhooks"
+description: "Use SupportDesk webhooks to receive real-time HTTP POST notifications when tickets are created, updated, or resolved — and build custom integrations with your own tools."
+---
+
+Webhooks give you a direct line from SupportDesk to any system you control. Rather than polling the API to check for changes, you register an HTTPS endpoint and SupportDesk will push a structured JSON payload to that endpoint the moment a ticket event occurs. This makes webhooks the right tool for building real-time dashboards, syncing support activity to your internal data warehouse, triggering automated workflows in your own infrastructure, or creating two-way integrations with tools that SupportDesk doesn't natively support.
+
+## How Webhooks Work
+
+When a ticket event occurs in SupportDesk — for example, a ticket is created or its status changes — SupportDesk sends an HTTP POST request to each of your registered webhook endpoints. The request body contains a JSON payload describing the event and the current state of the ticket.
+
+Your endpoint must:
+1. Be accessible over HTTPS
+2. Return a `2xx` HTTP status code to acknowledge receipt
+3. Respond within **5 seconds** to avoid being treated as a failure
+
+SupportDesk considers any non-`2xx` response (or a timeout) a delivery failure and will retry the request automatically.
+
+## Supported Events
+
+Subscribe to any combination of the following ticket events when configuring a webhook.
+
+| Event | Description |
+|---|---|
+| `ticket.created` | A new ticket has been created from any channel |
+| `ticket.updated` | One or more ticket fields (priority, tags, custom fields) have been updated |
+| `ticket.status_changed` | The ticket status has changed (e.g., `open` → `pending`, `pending` → `resolved`) |
+| `ticket.assigned` | The ticket has been assigned or reassigned to an agent or team |
+| `ticket.comment_added` | A new public reply or internal note has been added to the ticket |
+| `ticket.resolved` | The ticket has been marked as resolved |
+| `ticket.sla_breached` | The ticket has breached its SLA response or resolution deadline |
+
+## Creating a Webhook
+
+<Steps>
+  <Step title="Open webhook settings">
+    In your SupportDesk workspace, go to **Settings → Integrations → Webhooks**.
+  </Step>
+  <Step title="Add a new webhook">
+    Click **Add Webhook**. A configuration panel will appear.
+  </Step>
+  <Step title="Enter your endpoint URL">
+    Paste the HTTPS URL of your endpoint in the **Endpoint URL** field. SupportDesk will POST all selected event payloads to this address.
+  </Step>
+  <Step title="Select events to subscribe to">
+    Check the box next to each event type you want this webhook to receive. You can subscribe a single endpoint to all events or create multiple webhooks with different event subscriptions for different endpoints.
+  </Step>
+  <Step title="Copy your signing secret">
+    After saving, SupportDesk generates a unique **signing secret** for this webhook. Copy it and store it securely — you'll use it to verify that incoming requests genuinely originate from SupportDesk. This secret is only shown once.
+  </Step>
+</Steps>
+
+## Payload Structure
+
+Every webhook request body follows the same JSON envelope. Here's an example payload for a `ticket.created` event:
+
+```json
+{
+  "event": "ticket.created",
+  "timestamp": "2024-01-15T10:30:00Z",
+  "ticket": {
+    "id": "TKT-1042",
+    "subject": "Database timeout issue",
+    "priority": "high",
+    "status": "open",
+    "requester": {
+      "email": "eng@customer.com",
+      "name": "Jane Smith"
+    },
+    "created_at": "2024-01-15T10:29:58Z"
+  }
+}
+```
+
+- `event` — the event type identifier (see [Supported Events](#supported-events) above)
+- `timestamp` — the ISO 8601 UTC time the event was fired
+- `ticket` — the full ticket object at the time of the event, including all standard and custom fields
+
+For events like `ticket.status_changed` and `ticket.updated`, the payload also includes a `previous` object containing the field values before the change, so you can diff what changed.
+
+## Verifying Webhook Signatures
+
+Every POST request from SupportDesk includes an `X-SupportDesk-Signature` header containing an HMAC-SHA256 signature of the raw request body, signed with your webhook's signing secret. You should verify this signature before processing any payload to ensure the request is legitimate and hasn't been tampered with.
+
+Here's how to verify the signature in Node.js:
+
+```javascript
+const crypto = require('crypto');
+
+const signature = req.headers['x-supportdesk-signature'];
+const expected = crypto
+  .createHmac('sha256', process.env.WEBHOOK_SECRET)
+  .update(JSON.stringify(req.body))
+  .digest('hex');
+
+if (signature !== expected) {
+  return res.status(401).send('Invalid signature');
+}
+```
+
+Key implementation notes:
+- Compute the HMAC over the **raw request body string**, not a re-serialized version of the parsed JSON. Parsing and re-stringifying the body can change whitespace and key ordering, causing a signature mismatch.
+- Store your signing secret in an environment variable (`WEBHOOK_SECRET` in the example above) — never hard-code it in your source code.
+- Reject requests with a `401` status if the signatures don't match.
+
+## Retries
+
+If your endpoint returns a non-`2xx` response or fails to respond within 5 seconds, SupportDesk treats the delivery as failed and will automatically retry up to **5 times** using exponential backoff:
+
+| Attempt | Delay |
+|---|---|
+| 1st retry | 30 seconds |
+| 2nd retry | 2 minutes |
+| 3rd retry | 10 minutes |
+| 4th retry | 30 minutes |
+| 5th retry | 2 hours |
+
+If all 5 retries fail, the delivery is marked as permanently failed. You can view failed deliveries and manually trigger a replay from **Settings → Integrations → Webhooks → Delivery Log**.
+
+<Warning>
+  Your endpoint must return a `2xx` response within **5 seconds** of receiving the request. If your processing logic takes longer than this — for example, because you're writing to a database or calling a downstream API — acknowledge the webhook immediately with a `200 OK` and handle the processing asynchronously in a background job. Slow endpoints will be retried unnecessarily, which can result in duplicate event processing if you're not careful.
+</Warning>
+
+<Tip>
+  When developing and testing your webhook handler locally, use a tool like [ngrok](https://ngrok.com) to expose your local server over a public HTTPS URL. Run `ngrok http 3000` (replacing `3000` with your local port) and use the generated HTTPS URL as your webhook endpoint in SupportDesk. This lets you receive live webhook payloads directly on your machine without deploying first.
+</Tip>

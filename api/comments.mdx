@@ -1,0 +1,163 @@
+---
+title: "Comments API — Post and Retrieve Ticket Replies"
+sidebarTitle: "Comments"
+description: "REST API endpoints for posting replies and internal notes on SupportDesk tickets. Add customer-visible replies or agent-only internal notes via the API."
+---
+
+Comments are the conversation layer of a ticket. They come in two types: **replies**, which are customer-visible responses that appear in the email thread, and **internal notes**, which are agent-only annotations visible only inside SupportDesk. The Comments API lets you post both types programmatically — useful for automating first responses, routing messages from external channels, or annotating tickets with context pulled from other systems.
+
+---
+
+## POST /tickets/:id/comments
+
+Post a new comment on a ticket. Depending on the `type` parameter, the comment will either be sent to the customer as a reply or saved as a private internal note.
+
+**Path Parameters**
+
+| Parameter | Description |
+|---|---|
+| `id` | The unique ID of the ticket to comment on. |
+
+**Request Body**
+
+<ParamField body="body" type="string" required>
+  The content of the comment. Plain text is supported. Maximum 50,000 characters.
+</ParamField>
+
+<ParamField body="type" type="string">
+  The comment type. One of `"reply"` or `"note"`. Defaults to `"reply"` if omitted.
+
+  - `reply` — Sent to the requester as part of the email conversation. Appears in the customer-facing timeline.
+  - `note` — An internal note visible only to agents in SupportDesk. Never sent to the customer.
+</ParamField>
+
+<ParamField body="author_id" type="string">
+  The ID of the agent posting the comment. If omitted, the comment is attributed to the API key owner. Must be an active agent in your workspace.
+</ParamField>
+
+**Example Request — Posting a customer-visible reply**
+
+```bash
+curl https://api.supportdesk.io/v1/tickets/tkt_01HXYZ003/comments \
+  -X POST \
+  -H "Authorization: Bearer sk_live_abc123xyz" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "body": "Hi — thanks for reaching out! We have identified the issue with the 403 responses and a fix is being deployed now. You should see normal behavior restored within 15 minutes. We will follow up once the deployment is complete.",
+    "type": "reply",
+    "author_id": "usr_01HXYZ201"
+  }'
+```
+
+**Example Response** `201 Created`
+
+```json
+{
+  "id": "cmt_01HXYZ801",
+  "ticket_id": "tkt_01HXYZ003",
+  "type": "reply",
+  "body": "Hi — thanks for reaching out! We have identified the issue with the 403 responses and a fix is being deployed now. You should see normal behavior restored within 15 minutes. We will follow up once the deployment is complete.",
+  "author": {
+    "id": "usr_01HXYZ201",
+    "name": "Jordan Lee"
+  },
+  "created_at": "2024-05-10T14:02:17Z"
+}
+```
+
+**Example Request — Posting an internal note**
+
+```bash
+curl https://api.supportdesk.io/v1/tickets/tkt_01HXYZ003/comments \
+  -X POST \
+  -H "Authorization: Bearer sk_live_abc123xyz" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "body": "Root cause: IAM policy for the service account role was over-restricted during the v2.3 deploy. Rollback in progress. Incident postmortem linked in Notion: notion.so/incidents/2024-0510.",
+    "type": "note"
+  }'
+```
+
+**Example Response** `201 Created`
+
+```json
+{
+  "id": "cmt_01HXYZ802",
+  "ticket_id": "tkt_01HXYZ003",
+  "type": "note",
+  "body": "Root cause: IAM policy for the service account role was over-restricted during the v2.3 deploy. Rollback in progress. Incident postmortem linked in Notion: notion.so/incidents/2024-0510.",
+  "author": {
+    "id": "usr_01HXYZ901",
+    "name": "API Key — Production Webhook Consumer"
+  },
+  "created_at": "2024-05-10T14:05:44Z"
+}
+```
+
+<Note>
+  Internal notes (`type: "note"`) are **never** sent to the customer. They do not trigger outbound emails and are not visible in the customer-facing help portal. Use them freely for team communication, investigation logs, and linking to external resources.
+</Note>
+
+---
+
+## GET /tickets/:id/comments
+
+Retrieve all comments on a ticket, optionally filtered by type.
+
+**Path Parameters**
+
+| Parameter | Description |
+|---|---|
+| `id` | The unique ID of the ticket whose comments you want to retrieve. |
+
+**Query Parameters**
+
+| Parameter | Type | Description |
+|---|---|---|
+| `type` | string | Filter results by comment type. Values: `reply`, `note`, `all`. Defaults to `all`. |
+| `page` | integer | Page number for pagination. Defaults to `1`. |
+| `per_page` | integer | Number of results per page. Defaults to `25`. Maximum `100`. |
+
+**Example Request**
+
+```bash
+curl "https://api.supportdesk.io/v1/tickets/tkt_01HXYZ003/comments?type=all" \
+  -H "Authorization: Bearer sk_live_abc123xyz"
+```
+
+**Example Response** `200 OK`
+
+```json
+{
+  "data": [
+    {
+      "id": "cmt_01HXYZ801",
+      "ticket_id": "tkt_01HXYZ003",
+      "type": "reply",
+      "body": "Hi — thanks for reaching out! We have identified the issue with the 403 responses and a fix is being deployed now. You should see normal behavior restored within 15 minutes. We will follow up once the deployment is complete.",
+      "author": {
+        "id": "usr_01HXYZ201",
+        "name": "Jordan Lee"
+      },
+      "created_at": "2024-05-10T14:02:17Z"
+    },
+    {
+      "id": "cmt_01HXYZ802",
+      "ticket_id": "tkt_01HXYZ003",
+      "type": "note",
+      "body": "Root cause: IAM policy for the service account role was over-restricted during the v2.3 deploy. Rollback in progress. Incident postmortem linked in Notion: notion.so/incidents/2024-0510.",
+      "author": {
+        "id": "usr_01HXYZ901",
+        "name": "API Key — Production Webhook Consumer"
+      },
+      "created_at": "2024-05-10T14:05:44Z"
+    }
+  ],
+  "meta": {
+    "page": 1,
+    "per_page": 25,
+    "total": 2,
+    "total_pages": 1
+  }
+}
+```

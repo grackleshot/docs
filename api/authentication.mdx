@@ -1,0 +1,97 @@
+---
+title: "Authenticate API Requests with SupportDesk API Keys"
+sidebarTitle: "Authentication"
+description: "Generate and manage SupportDesk API keys. Pass your key in the Authorization header on every request. Learn how to rotate keys and handle auth errors."
+---
+
+Every request to the SupportDesk API must be authenticated with an API key. Keys are workspace-scoped, tied to the permissions of the agent who created them, and passed as a Bearer token in the `Authorization` header. This page covers how to generate a key, how to use it in requests, and how to manage your keys over time — including rotation and revocation.
+
+<Warning>
+  Never expose your API keys in client-side code, public repositories, or anywhere outside a secure server environment. If a key is compromised, rotate it immediately from **Settings > API Keys**.
+</Warning>
+
+## Getting an API Key
+
+<Steps>
+  <Step title="Sign in to SupportDesk">
+    Log in to your workspace at [app.supportdesk.io](https://app.supportdesk.io).
+  </Step>
+  <Step title="Open API Keys settings">
+    Navigate to **Settings > API Keys** in the left sidebar. You must be an Admin or have the API access permission to see this section.
+  </Step>
+  <Step title="Generate a new key">
+    Click **Generate New Key**. Give the key a descriptive name (see the note on naming below), then click **Create**.
+  </Step>
+  <Step title="Copy the key">
+    Your new API key is displayed exactly once. Copy it and store it securely — in a secrets manager, environment variable, or your CI/CD platform's secret store. You will not be able to view the full key again after closing this dialog.
+  </Step>
+</Steps>
+
+## Using Your API Key
+
+Pass your API key in the `Authorization` header of every request using the `Bearer` scheme:
+
+```bash
+curl https://api.supportdesk.io/v1/tickets \
+  -H "Authorization: Bearer sk_live_abc123xyz"
+```
+
+If your key is missing or the header is malformed, the API returns a `401 Unauthorized` response.
+
+<Tip>
+  In local development and CI environments, use test keys (`sk_test_`) instead of live keys. Test keys behave identically to live keys but operate against an isolated dataset that doesn't affect your production workspace.
+</Tip>
+
+## Key Types
+
+SupportDesk issues two types of API keys, distinguished by their prefix:
+
+| Key Type | Prefix | When to Use |
+|---|---|---|
+| **Live key** | `sk_live_` | Production environments where you are interacting with real workspace data. |
+| **Test key** | `sk_test_` | Local development, automated testing, and CI/CD pipelines. |
+
+Both key types use the same API endpoints and behave identically — the difference is in the data they operate on. Test keys are isolated to a sandboxed version of your workspace and will never modify production tickets, users, or configurations.
+
+## Permissions
+
+API keys inherit the permissions of the agent who created them. This means:
+
+- **Admin-created keys** can perform any action available in the API, including user management and billing operations.
+- **Agent-created keys** are scoped to the actions that agent can perform in the dashboard. They cannot access billing endpoints or the user management API.
+
+If a request is blocked due to insufficient permissions, the API returns `403 Forbidden`. To grant broader access, have an Admin generate the key on your behalf.
+
+<Note>
+  Give each API key a descriptive name that reflects its purpose and the system consuming it — for example, `"Production webhook consumer"`, `"Zapier integration"`, or `"Data warehouse sync"`. Clear names make it easy to audit access and revoke the right key if something goes wrong.
+</Note>
+
+## Rotating a Key
+
+You should rotate API keys periodically, or immediately if you suspect a key has been exposed.
+
+<Steps>
+  <Step title="Open API Keys settings">
+    Go to **Settings > API Keys** in your SupportDesk workspace.
+  </Step>
+  <Step title="Rotate the key">
+    Find the key you want to rotate and click **Rotate** next to it.
+  </Step>
+  <Step title="Confirm rotation">
+    A confirmation dialog will appear. Click **Rotate Key** to proceed. The old key is **immediately revoked** — any requests using it will begin returning `401` at that moment.
+  </Step>
+  <Step title="Copy and deploy the new key">
+    Copy the newly generated key and update it in all systems that were using the old key before dismissing the dialog.
+  </Step>
+</Steps>
+
+## Revoking a Key
+
+To permanently delete an API key, go to **Settings > API Keys**, find the key you want to remove, and click **Delete**. Deletion is immediate and irreversible — the key cannot be recovered. Any integrations using the deleted key will start receiving `401 Unauthorized` errors.
+
+## Auth Errors
+
+| Status Code | Cause | Resolution |
+|---|---|---|
+| `401 Unauthorized` | The `Authorization` header is missing, the key is malformed, or the key has been revoked or expired. | Check that the header is formatted correctly (`Bearer <key>`) and that the key is still active in **Settings > API Keys**. |
+| `403 Forbidden` | The key is valid but doesn't have permission to perform the requested action (e.g., an agent key trying to access billing). | Have an Admin generate a key with the appropriate permissions, or perform the action through the dashboard. |

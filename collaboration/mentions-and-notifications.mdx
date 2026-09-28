@@ -1,0 +1,109 @@
+---
+title: "@Mentions and Notification Settings in SupportDesk"
+sidebarTitle: "Mentions & Notifications"
+description: "Use @mentions to pull teammates into tickets, and configure your SupportDesk notification preferences for email, in-app, and Slack alerts."
+---
+
+Staying informed without being overwhelmed is the goal of any well-configured notification system. SupportDesk gives you two complementary tools to achieve it: @mentions let you deliberately pull a specific teammate's attention to a ticket in the moment, while notification preferences let each agent decide which events they want to hear about and through which channel. Together, they keep your team connected on complex cases without flooding inboxes with noise.
+
+## @Mentions
+
+An @mention is the fastest way to bring a specific teammate into a ticket conversation. You can use @mentions in any internal note or internal comment — they are not available in customer-facing replies.
+
+<Steps>
+  <Step title="Open or create an internal note">
+    In the ticket reply area, click the **Internal Note** tab to switch to note mode.
+  </Step>
+  <Step title="Type @">
+    In the note body, type the **@** symbol. A dropdown appears listing agents in your workspace.
+  </Step>
+  <Step title="Search for the teammate">
+    Continue typing the agent's name to filter the list, then click their name to insert the mention.
+  </Step>
+  <Step title="Finish and submit the note">
+    Complete your message and click **Add Note**. The mentioned agent immediately receives both an **in-app notification** (visible in their bell icon queue) and an **email notification** containing a direct link to the ticket and a preview of the note content.
+  </Step>
+</Steps>
+
+### Who Can Be Mentioned
+
+You can @mention any agent who is a member of your SupportDesk workspace. You cannot @mention customers or external contacts — mentions are strictly an internal collaboration tool.
+
+<Note>
+  If you @mention an agent who has muted their notifications or is on Do Not Disturb, they will still see the mention in their in-app notification center the next time they log in, even if they did not receive an email or Slack alert at the time.
+</Note>
+
+## Notification Types
+
+SupportDesk generates notifications for the following events. You can configure which of these you receive and on which channel in your personal notification settings.
+
+| Event | Description |
+|---|---|
+| **New ticket assigned to you** | Triggered when a ticket is assigned to you by another agent, a rule, or round-robin rotation. |
+| **Ticket you're watching was updated** | Triggered when any new reply, note, or status change occurs on a ticket you're watching. |
+| **Customer replied to a ticket you own** | Triggered when the customer sends a new message on a ticket where you are the assignee. |
+| **You were @mentioned in a note** | Triggered when a teammate uses @yourname in an internal note or comment. |
+| **SLA breach warning** | Triggered when a ticket is approaching its SLA deadline (configurable threshold, default 30 minutes). |
+| **SLA breached** | Triggered when a ticket has exceeded its SLA response or resolution target. |
+
+## Notification Channels
+
+Each notification type can be delivered through one or more of the following channels:
+
+<CardGroup cols={3}>
+  <Card title="In-App" icon="bell">
+    Notifications appear in the **bell icon** in the top-right corner of SupportDesk. A red badge shows the unread count. Clicking the bell opens a notification panel with direct links to each event.
+  </Card>
+  <Card title="Email" icon="envelope">
+    Notifications are sent to the email address associated with your SupportDesk account. Emails include a summary of the event and a one-click link to the relevant ticket.
+  </Card>
+  <Card title="Slack" icon="slack">
+    If your workspace has the Slack integration enabled, you can receive notifications as direct messages from the SupportDesk Slack bot. See the Slack Integration guide for setup steps.
+  </Card>
+</CardGroup>
+
+## Configuring Notification Preferences
+
+Each agent controls their own notification settings independently. Changes you make apply only to your account.
+
+<Steps>
+  <Step title="Open Settings">
+    Click the gear icon in the bottom-left corner of SupportDesk to open your account settings.
+  </Step>
+  <Step title="Navigate to Notifications">
+    Select **Notifications** from the left menu. You'll see a matrix of notification types (rows) and delivery channels (columns).
+  </Step>
+  <Step title="Toggle your preferences">
+    Check or uncheck each cell in the matrix to enable or disable a specific notification type for a specific channel. For example, you might enable SLA breach warnings for both In-App and Slack, but disable email for that event to avoid duplication.
+  </Step>
+  <Step title="Save your changes">
+    Click **Save Preferences**. Changes take effect immediately for new events.
+  </Step>
+</Steps>
+
+## Watching Tickets
+
+You don't have to be the assigned agent to receive updates on a ticket. Watching a ticket opts you into notifications for all activity on that ticket — replies, notes, status changes, and assignments — without making you the owner.
+
+<Steps>
+  <Step title="Open the ticket">
+    Navigate to the ticket you want to follow.
+  </Step>
+  <Step title="Click Watch">
+    In the ticket header or the right-hand sidebar, click the **Watch** button (shown as an eye icon). The icon fills to indicate you are now watching.
+  </Step>
+  <Step title="Receive updates">
+    You'll receive notifications for the ticket based on your configured preferences for the "Ticket you're watching was updated" event type.
+  </Step>
+  <Step title="Unwatch when resolved">
+    Click the eye icon again to stop watching. SupportDesk also automatically removes your watch when the ticket is closed, so you're not notified about future reopens unless you watch again.
+  </Step>
+</Steps>
+
+<Tip>
+  Watching is ideal for managers who want visibility into escalated tickets without being listed as the owner, or for agents who handed off a ticket but want to see how it resolves.
+</Tip>
+
+<Info>
+  SupportDesk supports **notification batching** to reduce email volume during busy periods. In your notification settings, you can switch any email notification type from **Real-Time** (sent immediately) to **Digest** mode (bundled into a summary email sent every 15 minutes, hourly, or daily). In-app and Slack notifications are always delivered in real-time regardless of your email digest setting.
+</Info>

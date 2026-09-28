@@ -1,0 +1,78 @@
+---
+title: "Ticket Statuses and Workflow States Explained"
+sidebarTitle: "Statuses & Workflows"
+description: "Understand the ticket status lifecycle in SupportDesk — from Open to Resolved — and how to configure custom workflow stages for your support process."
+---
+
+Every ticket in SupportDesk moves through a series of statuses that reflect where it stands in your support process. Statuses aren't just labels — they control how tickets appear in your queue, when SLA clocks run, and what automated actions SupportDesk takes on your behalf. Understanding the default lifecycle and knowing how to extend it with custom statuses gives your team a shared vocabulary for where any ticket stands at any moment.
+
+## The Default Status Lifecycle
+
+Tickets flow through statuses in a progression that mirrors the way support work actually happens:
+
+```
+Open → In Progress → Pending Customer → Resolved → Closed
+```
+
+You can move tickets forward or backward between statuses at any point. For example, a ticket that was **Resolved** can return to **In Progress** if the customer reports that the fix didn't work.
+
+## Default Statuses
+
+| Status | What It Means | Typical Trigger |
+|---|---|---|
+| **Open** | The ticket has been submitted and is waiting to be picked up by your team. It's visible in the main inbox queue. | Ticket creation (via any channel). |
+| **In Progress** | An agent is actively working on the ticket. It has been triaged and assigned. | Agent claims the ticket or a routing rule assigns it. |
+| **Pending Customer** | Your team has responded and is waiting for the customer to provide more information or confirm a resolution. | Agent sends a reply requesting customer input. SLA clock pauses. |
+| **Resolved** | The issue has been addressed. The customer has been notified, but the ticket remains open for a short window in case they have follow-up questions. | Agent marks the ticket resolved after confirming the fix. |
+| **Closed** | The ticket is permanently concluded. No further action is expected. | Automatic after 7 days in Resolved state, or manual close by an agent. |
+
+<Note>
+  Closed tickets are not permanently locked. If a customer replies to a closed ticket notification email, SupportDesk automatically reopens the ticket and sets its status back to **Open**, placing it back in the inbox queue. Your team will receive a notification so the reopened ticket doesn't go unnoticed.
+</Note>
+
+## Custom Statuses
+
+If the default statuses don't fully capture your support workflow, you can add custom statuses that sit between the standard ones. Custom statuses are useful for teams that coordinate with engineering, QA, or other internal groups before a ticket can be resolved.
+
+Common examples:
+- **Awaiting Engineering** — The issue has been triaged and handed off to an engineering team for investigation.
+- **QA Review** — A fix has been deployed and is undergoing quality assurance before the customer is notified.
+- **Legal Review** — The ticket involves a compliance or contractual issue that requires sign-off before response.
+
+### Adding a Custom Status
+
+1. Go to **Settings → Workflows → Statuses** and click **+ Add Status**.
+2. Enter a name and choose where it sits in the lifecycle (drag it between the statuses it should flow between).
+3. Choose whether the SLA clock should run or pause while a ticket is in this status.
+4. Click **Save**. The new status is immediately available on all tickets.
+
+Custom statuses appear alongside default statuses in all views, filters, and reports.
+
+## Status Automation
+
+SupportDesk can automatically transition tickets between statuses based on time and activity. You configure these automations in **Settings → Workflows → Automations**.
+
+### Auto-Close After Resolution
+
+Tickets that remain in **Resolved** status for 7 days without any customer activity are automatically moved to **Closed**. This keeps your queue clean and ensures that resolved issues don't linger indefinitely.
+
+You can adjust the auto-close window (or disable it entirely) in **Settings → Workflows → Automations → Auto-Close**.
+
+### Auto-Reopen on Customer Reply
+
+If a customer replies to a ticket that is in **Resolved** or **Closed** status, SupportDesk automatically reopens it and sets the status back to **Open**. The ticket is placed back in the inbox queue and your team is notified.
+
+This ensures that customers who experience a recurrence after an apparent resolution don't fall through the cracks.
+
+### Auto-Resolve on Inactivity (Optional)
+
+You can optionally configure tickets in **Pending Customer** status to auto-resolve if the customer doesn't respond within a specified number of days. Before closing, SupportDesk sends the customer a reminder email. If there's still no response, the ticket moves to **Resolved**. This automation is disabled by default.
+
+<Tip>
+  Use the **Pending Customer** status strategically to manage your SLA clocks. When your team sends a reply and is waiting on the customer, setting the status to Pending Customer pauses the SLA timer — so the clock isn't counting against you during time the customer controls. Make it a team habit to move tickets to Pending Customer immediately after sending a reply that requires a customer response.
+</Tip>
+
+## Next Steps
+
+- [Triage & Routing](/tickets/triage-and-routing) — Automate status transitions as part of routing rules.
+- [Merging & Linking](/tickets/merging-and-linking) — Consolidate duplicate tickets and track related issues.

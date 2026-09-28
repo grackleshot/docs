@@ -1,0 +1,123 @@
+---
+title: "Escalation Workflows for Complex Support Cases"
+sidebarTitle: "Escalations"
+description: "Configure escalation rules in SupportDesk to automatically elevate critical or stalled tickets to senior agents, engineering, or management based on conditions you define."
+---
+
+In a low-volume, high-complexity support environment, escalations aren't a sign that something went wrong — they're a deliberate, structured part of how your team handles its hardest cases. A ticket that requires engineering review, an enterprise account where stakes are high, or a case that's been stalled for two days without resolution all need a clear path upward. SupportDesk gives you the tools to define that path explicitly, whether it's triggered manually by an agent or fired automatically by the rules engine.
+
+## When to Escalate
+
+Not every difficult ticket needs to be escalated, but the following scenarios are reliable signals that escalation is the right move:
+
+- **SLA breach is imminent** — the first-response or resolution window is closing and progress has stalled.
+- **Customer is a VIP or enterprise account** — the relationship or revenue risk justifies pulling in a senior resource immediately.
+- **Engineering involvement is required** — the issue is a confirmed product bug, a data integrity problem, or requires backend access that frontline agents don't have.
+- **Ticket has been unresolved beyond a threshold** — a case that's been Open for 48+ hours with no resolution in sight needs fresh eyes and ownership.
+- **Customer sentiment is deteriorating** — a customer has escalated frustration in their messages, or has mentioned going to leadership, legal, or social media.
+
+## Manual Escalation
+
+Sometimes the judgment call happens in the moment and automation can't anticipate it. Any agent can manually escalate a ticket using the following steps:
+
+1. **Raise the priority** — change the ticket priority to `Critical` using the Priority field in the ticket sidebar. This surfaces it immediately in the Critical queue.
+2. **Reassign to the escalation team** — use the Assignee field to route the ticket to your designated escalation team (e.g., `senior-support` or `escalations`).
+3. **Post an internal note** — add an internal note explaining why you're escalating, what you've already tried, what the customer's situation is, and what kind of help you need. This context is essential for the receiving agent to pick up without starting from scratch.
+
+<Note>
+  Maintaining an escalation audit trail in internal notes is critical for complex cases. Every handoff should include a note that documents the timeline, actions taken, and current status. This prevents the receiving agent from duplicating work or missing important context — and it creates a record that's invaluable for post-mortems.
+</Note>
+
+## Automated Escalation Rules
+
+The real power of SupportDesk's escalation system is in automation. You can configure the rules engine to detect escalation-worthy conditions and act on them before a human even notices. Here are two practical examples you can build directly in **Settings > Automation > Rules**:
+
+### Example 1: Stalled High-Priority Ticket
+
+**Trigger:** Ticket Updated
+**Conditions:**
+- Ticket age is greater than 24 hours
+- Status equals `Open`
+- Priority equals `High`
+
+**Actions:**
+- Assign to Team → `senior-support`
+- Send Notification → Team Lead `@escalations-lead`
+- Post Internal Note → `"Auto-escalated: ticket has been open >24h with no resolution. Assigned to senior-support."`
+
+### Example 2: SLA Breach on Enterprise Account
+
+**Trigger:** SLA Breached
+**Conditions:**
+- Custom field: Account Plan equals `Enterprise`
+
+**Actions:**
+- Set Priority → `Critical`
+- Send Notification → Account Manager assigned to this customer
+- Post Internal Note → `"SLA breached on Enterprise account. Account Manager notified. Immediate response required."`
+
+## Creating an Escalation Rule
+
+<Steps>
+  <Step title="Navigate to Automation Rules">
+    Go to **Settings > Automation > Rules** and click **New Rule**. Give the rule a descriptive name like `"Auto-Escalate: Enterprise SLA Breach"`.
+  </Step>
+  <Step title="Select the Trigger">
+    Choose the event that should kick off the escalation — typically **SLA Breached**, **Ticket Updated**, or **Status Changed**.
+  </Step>
+  <Step title="Define Conditions">
+    Add the conditions that identify tickets that genuinely need escalation. Be precise — overly broad conditions will flood your escalation team with noise. Combine conditions like account plan, ticket age, priority, and current assignee to target exactly the right cases.
+  </Step>
+  <Step title="Configure Escalation Actions">
+    Add actions that transfer ownership and create visibility: reassign to the escalation team, bump priority to Critical, notify the relevant lead, and post an internal note with context. Stack all of these as separate actions within the same rule.
+  </Step>
+  <Step title="Save and Position the Rule">
+    Save the rule and use the drag handle in the rule list to position it correctly in the evaluation order. Escalation rules should generally sit high in the list so they aren't blocked by earlier matching rules.
+  </Step>
+  <Step title="Test with a Sample Ticket">
+    Before enabling the rule broadly, use **Settings > Automation > Test Rule** to run it against existing tickets and confirm it's matching the right cases.
+  </Step>
+</Steps>
+
+## Escalation Chains
+
+For complex cases, a single escalation step isn't always enough. SupportDesk supports multi-step escalation chains by using time-based trigger rules in sequence:
+
+1. **Step 1 — Escalate to Team Lead:** If a ticket is High priority and unresolved after 12 hours → assign to `team-lead` queue + notify the team lead.
+2. **Step 2 — Escalate to VP of Support:** If the same ticket is still unresolved after another 6 hours (ticket age > 18h) AND assignee is in `team-lead` queue → assign to `vp-support` + send an urgent notification.
+
+You implement each step as a separate automation rule. Because rules re-evaluate on every ticket update, the second rule fires when its additional time condition is met — even if the ticket was previously modified by the first rule.
+
+<CardGroup cols={2}>
+  <Card title="Step 1: Team Lead Escalation" icon="arrow-up">
+    **Trigger:** Ticket Updated  
+    **Condition:** Age > 12h, Priority = High, Status = Open  
+    **Actions:** Assign to team-lead, notify lead
+  </Card>
+  <Card title="Step 2: VP Escalation" icon="arrow-up-right">
+    **Trigger:** Ticket Updated  
+    **Condition:** Age > 18h, Priority = Critical, Status = Open  
+    **Actions:** Assign to vp-support, send urgent notification
+  </Card>
+</CardGroup>
+
+## Slack Escalation Notifications
+
+If your team uses Slack, you can fire a real-time alert to a dedicated escalation channel whenever a ticket escalates. This ensures the right people are notified instantly — without relying on email or polling the queue.
+
+To set this up:
+
+1. Connect your Slack workspace under **Settings > Integrations > Slack**.
+2. Designate a channel for escalation alerts (e.g., `#support-escalations`).
+3. In your escalation automation rules, add a **Send Slack Notification** action and point it at your escalation channel.
+4. Customize the message template to include the ticket ID, subject, customer name, and a direct link to the ticket.
+
+Once configured, every automated escalation fires a message like:
+
+> 🚨 **Escalation Alert** — Ticket #4821 (`"API returning 500 errors"`) has been escalated to senior-support. Customer: Acme Corp (Enterprise). [View Ticket →]
+
+Your escalation team can jump directly from the Slack message into the ticket without any queue-hunting.
+
+<Tip>
+  Create a dedicated **Escalation Queue** in SupportDesk (under **Settings > Queues**) that automatically surfaces all tickets tagged as escalated. This gives your senior team a single view of everything that needs urgent attention — rather than relying on reassignment notifications alone. The queue is your escalation team's homepage.
+</Tip>

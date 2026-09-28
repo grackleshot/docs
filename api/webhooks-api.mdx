@@ -1,0 +1,140 @@
+---
+title: "Webhooks API — Register and Manage Webhook Endpoints"
+sidebarTitle: "Webhooks API"
+description: "REST API endpoints for registering, listing, and deleting SupportDesk webhook subscriptions. Automate event-driven integrations with your own systems."
+---
+
+The Webhooks API lets you programmatically register HTTP endpoints to receive real-time event notifications from SupportDesk. Instead of polling the API for changes, you subscribe to specific event types — like ticket creation, status updates, or SLA breaches — and SupportDesk will deliver a signed HTTP POST payload to your endpoint every time a matching event occurs. This is the foundation for event-driven integrations: syncing tickets to external systems, triggering automations, or streaming support activity into your data pipeline.
+
+<Note>
+  The `signing_secret` for a webhook endpoint is returned **only once**, in the `201` response when the webhook is created. Store it securely immediately after creation — it cannot be retrieved again. You use this secret to verify that incoming webhook payloads genuinely originated from SupportDesk. See the [Webhooks integration guide](/integrations/webhooks) for signature verification details.
+</Note>
+
+---
+
+## GET /webhooks
+
+List all webhook endpoints currently registered in your workspace.
+
+**Example Request**
+
+```bash
+curl https://api.supportdesk.io/v1/webhooks \
+  -H "Authorization: Bearer sk_live_abc123xyz"
+```
+
+**Example Response** `200 OK`
+
+```json
+{
+  "data": [
+    {
+      "id": "wh_01HXYZ701",
+      "url": "https://hooks.yourapp.io/supportdesk/tickets",
+      "events": ["ticket.created", "ticket.updated", "ticket.resolved"],
+      "active": true,
+      "created_at": "2024-03-01T12:00:00Z"
+    },
+    {
+      "id": "wh_01HXYZ702",
+      "url": "https://datawarehouse.yourapp.io/ingest/supportdesk",
+      "events": ["ticket.created", "ticket.comment_added", "ticket.sla_breached"],
+      "active": true,
+      "created_at": "2024-04-18T09:45:00Z"
+    }
+  ],
+  "meta": {
+    "page": 1,
+    "per_page": 25,
+    "total": 2,
+    "total_pages": 1
+  }
+}
+```
+
+---
+
+## POST /webhooks
+
+Register a new webhook endpoint. You specify the destination URL, the events you want to receive, and optionally a signing secret. If you don't provide a secret, SupportDesk generates one for you. The secret is included in the `201` response and is never returned again — store it before closing the response.
+
+**Request Body**
+
+<ParamField body="url" type="string" required>
+  The HTTPS URL of the endpoint that will receive webhook payloads. Must be publicly reachable and respond with a `2xx` status code within 10 seconds to be considered a successful delivery.
+</ParamField>
+
+<ParamField body="events" type="array of strings" required>
+  The list of event types to subscribe to. At least one event is required. Available events:
+
+  | Event | Triggered When |
+  |---|---|
+  | `ticket.created` | A new ticket is created by any means (API, email, portal, agent). |
+  | `ticket.updated` | Any field on a ticket changes (status, priority, assignee, custom fields). |
+  | `ticket.resolved` | A ticket's status changes to `resolved`. |
+  | `ticket.comment_added` | A reply or internal note is posted on a ticket. |
+  | `ticket.sla_breached` | A ticket exceeds its SLA response or resolution time target. |
+</ParamField>
+
+<ParamField body="secret" type="string">
+  A custom signing secret used to sign webhook payloads. If omitted, SupportDesk generates a cryptographically random secret for you. Secrets must be at least 16 characters if provided. The secret is used to compute an `X-SupportDesk-Signature` header on each delivery for verification.
+</ParamField>
+
+**Example Request**
+
+```bash
+curl https://api.supportdesk.io/v1/webhooks \
+  -X POST \
+  -H "Authorization: Bearer sk_live_abc123xyz" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "url": "https://hooks.yourapp.io/supportdesk/sla-alerts",
+    "events": ["ticket.sla_breached", "ticket.created"],
+    "secret": "my-custom-signing-secret-32chars"
+  }'
+```
+
+**Example Response** `201 Created`
+
+```json
+{
+  "id": "wh_01HXYZ703",
+  "url": "https://hooks.yourapp.io/supportdesk/sla-alerts",
+  "events": ["ticket.sla_breached", "ticket.created"],
+  "active": true,
+  "signing_secret": "my-custom-signing-secret-32chars",
+  "created_at": "2024-05-10T17:00:00Z"
+}
+```
+
+<Warning>
+  The `signing_secret` in the response above is shown only in this `201 Created` response. It will not appear in any subsequent `GET /webhooks` or `GET /webhooks/:id` responses. Copy it now and store it in your secrets manager or environment configuration.
+</Warning>
+
+---
+
+## DELETE /webhooks/:id
+
+Permanently delete a webhook subscription. Once deleted, SupportDesk will immediately stop delivering events to the associated URL. This action cannot be undone — you will need to register a new webhook if you want to resume delivery.
+
+**Path Parameters**
+
+| Parameter | Description |
+|---|---|
+| `id` | The unique ID of the webhook subscription to delete (e.g., `wh_01HXYZ703`). |
+
+**Example Request**
+
+```bash
+curl https://api.supportdesk.io/v1/webhooks/wh_01HXYZ703 \
+  -X DELETE \
+  -H "Authorization: Bearer sk_live_abc123xyz"
+```
+
+**Response** `204 No Content`
+
+The response body is empty on success. If the webhook does not exist or has already been deleted, the API returns `404 Not Found`.
+
+<Warning>
+  Deleting a webhook immediately and permanently stops all event delivery to that URL. Any events that were in-flight at the moment of deletion will not be delivered. If you're migrating to a new endpoint URL, register the new webhook first and confirm it's receiving events before deleting the old one.
+</Warning>

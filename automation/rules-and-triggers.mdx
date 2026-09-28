@@ -1,0 +1,99 @@
+---
+title: "Automation Rules and Triggers for Support Workflows"
+sidebarTitle: "Rules & Triggers"
+description: "Create automation rules in SupportDesk to automatically act on tickets when conditions are met — assign, tag, prioritize, and notify without manual effort."
+---
+
+Automation rules let you define exactly how SupportDesk should respond when something happens to a ticket. Instead of manually triaging every incoming request, you set up conditions and actions once — and SupportDesk handles the rest. This is especially valuable for high-complexity support queues where routing the right ticket to the right person quickly can make the difference between a resolved issue and a churn risk.
+
+## How Rules Work
+
+Every time a ticket event occurs — such as a new ticket arriving or a customer sending a reply — SupportDesk evaluates all of your active automation rules from top to bottom. The first rule whose conditions match the ticket fires its configured actions. No further rules are evaluated after a match, so rule order matters significantly.
+
+Rules are composed of three parts: a **trigger event** (what happened), one or more **conditions** (what must be true), and one or more **actions** (what SupportDesk does in response).
+
+## Trigger Events
+
+Rules fire in response to specific ticket lifecycle events. Choose one of the following as your rule's trigger:
+
+| Trigger Event | When It Fires |
+|---|---|
+| **Ticket Created** | A new ticket enters SupportDesk via any channel |
+| **Ticket Updated** | Any field on the ticket changes (priority, status, assignee, etc.) |
+| **Customer Replied** | The customer submits a new reply on an existing ticket |
+| **Agent Replied** | An agent sends a response to the customer |
+| **Status Changed** | The ticket status transitions from one state to another |
+| **SLA Breached** | A first-response or resolution SLA deadline is missed |
+
+## Conditions
+
+Conditions narrow down which tickets a rule applies to. You can add multiple conditions to a single rule — all conditions must match for the rule to fire (AND logic). If you need OR logic, create separate rules for each branch.
+
+| Condition | Match Type | Example Values |
+|---|---|---|
+| **Subject contains** | Text match | `"error"`, `"down"`, `"billing"` |
+| **Sender email domain** | Exact / contains | `"enterprise.com"`, `"acme.io"` |
+| **Priority** | Equals | `High`, `Critical` |
+| **Custom field value** | Equals / contains | Account Plan = `Enterprise` |
+| **Channel** | Equals | `Email`, `API` |
+| **Tag** | Includes | `"bug"`, `"infra"`, `"outage"` |
+
+## Actions
+
+When a rule's conditions are met, SupportDesk executes the actions you've configured. You can stack multiple actions on a single rule — they all fire together.
+
+| Action | What It Does |
+|---|---|
+| **Assign to Agent** | Routes the ticket to a specific agent |
+| **Assign to Team** | Routes the ticket to a team's shared queue |
+| **Set Priority** | Changes the ticket priority (Low, Normal, High, Critical) |
+| **Set Status** | Transitions the ticket to Open, Pending, Resolved, or Closed |
+| **Add Tag** | Applies one or more tags to the ticket for categorization |
+| **Send Notification** | Sends an email or in-app alert to a specified agent or team |
+| **Post Internal Note** | Adds a private internal note to the ticket using a template |
+| **Add to Queue** | Places the ticket into a specific named queue for triage |
+
+## Creating a Rule
+
+<Steps>
+  <Step title="Open Automation Settings">
+    Navigate to **Settings > Automation > Rules**. You'll see a list of all existing rules and their current enabled/disabled state.
+  </Step>
+  <Step title="Click 'New Rule'">
+    Select **New Rule** in the top-right corner. Give your rule a clear, descriptive name — you'll thank yourself later when you have dozens of rules.
+  </Step>
+  <Step title="Choose a Trigger Event">
+    Select the event that should cause this rule to evaluate. For example, choose **Ticket Created** if you want the rule to run on every new inbound ticket.
+  </Step>
+  <Step title="Add Conditions">
+    Click **Add Condition** and configure each condition using the dropdowns. Combine multiple conditions to narrow the scope precisely. Use the preview panel to see how many existing tickets would currently match.
+  </Step>
+  <Step title="Add Actions">
+    Click **Add Action** and choose what SupportDesk should do when conditions match. Add as many actions as needed — for example, set priority AND assign to a team AND post an internal note.
+  </Step>
+  <Step title="Save and Enable">
+    Click **Save Rule**. The rule is saved in a disabled state by default. Toggle it to **Enabled** when you're ready to activate it. Use the drag handle on the left side of the rule list to adjust its position in the evaluation order.
+  </Step>
+</Steps>
+
+## Example Rule: Route Enterprise Critical Tickets
+
+Here's a real-world rule you can replicate to ensure your highest-value customers get immediate attention:
+
+**Rule Name:** Enterprise Critical — Route to Enterprise Team
+
+| Setting | Value |
+|---|---|
+| Trigger | Ticket Created |
+| Condition 1 | Sender email domain contains `enterprise.com` |
+| Condition 2 | Subject contains `"down"` OR Priority equals `Critical` |
+| Action 1 | Assign to Team → `enterprise-support` |
+| Action 2 | Set Priority → `Critical` |
+| Action 3 | Send Notification → Team Lead: `@sarah` |
+| Action 4 | Post Internal Note → `"Enterprise ticket auto-routed. SLA: 1h first response."` |
+
+This rule ensures that any ticket from an enterprise domain mentioning an outage — or already marked critical — skips general triage entirely and lands directly with the team equipped to handle it.
+
+<Warning>
+  Rules are evaluated **top-down** and stop at the first match. If a more general rule sits above a specific one, your specific rule may never fire. Always review rule order carefully when adding new rules. Reorder rules by dragging them in **Settings > Automation > Rules** — the topmost rule has the highest priority.
+</Warning>

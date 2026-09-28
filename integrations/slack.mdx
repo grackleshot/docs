@@ -1,0 +1,79 @@
+---
+title: "Integrate SupportDesk with Slack for Real-Time Alerts"
+sidebarTitle: "Slack"
+description: "Connect SupportDesk to Slack to receive ticket notifications, escalation alerts, and new ticket alerts in your team's channels — without leaving Slack."
+---
+
+For support teams that live in Slack, waiting for an email notification to learn about a new critical ticket or an impending SLA breach is too slow. SupportDesk's Slack integration pushes ticket activity into your team's channels in real time, so the right people are alerted at the right moment — without requiring anyone to keep a SupportDesk tab open. You stay in control of which events trigger notifications and which Slack channels receive them, so your team gets signal without noise.
+
+## What the Slack Integration Does
+
+Once connected, SupportDesk can post structured Slack messages to any channel in your workspace when meaningful ticket events occur. Each notification includes a deep link directly to the ticket, so your agents can click through and take action in seconds.
+
+The integration also supports **`/supportdesk` slash commands** (optional), allowing agents to look up tickets, check their queue, and update ticket status directly from Slack without switching context to the SupportDesk web app.
+
+## Setting Up the Slack Integration
+
+<Steps>
+  <Step title="Open Slack integration settings">
+    In your SupportDesk workspace, go to **Settings → Integrations → Slack**.
+  </Step>
+  <Step title="Connect to Slack">
+    Click **Connect to Slack**. You'll be redirected to Slack's OAuth authorization page.
+  </Step>
+  <Step title="Authorize the SupportDesk app">
+    Select the Slack workspace you want to connect and review the permissions requested by the SupportDesk app. Click **Allow** to authorize the connection. You'll be redirected back to SupportDesk automatically.
+  </Step>
+  <Step title="Choose your default notification channel">
+    Once connected, select the Slack channel where SupportDesk should post notifications by default — for example, `#support-alerts`. You can configure per-event routing to different channels after the initial setup.
+  </Step>
+  <Step title="Enable notification types">
+    Toggle on the ticket events you want to route to Slack. See the full list of notification types below. Click **Save** to activate the integration.
+  </Step>
+</Steps>
+
+## Notification Types
+
+You can enable or disable each notification type independently and route them to different Slack channels based on urgency or team ownership.
+
+| Notification | When It Fires |
+|---|---|
+| **New ticket created** | A ticket is created from any inbound channel |
+| **Ticket assigned to you** | A ticket is assigned to you specifically |
+| **SLA warning** | 30 minutes before a ticket is projected to breach its SLA |
+| **SLA breached** | A ticket's SLA response or resolution time has been exceeded |
+| **Escalation triggered** | A ticket has been escalated via a manual or automated escalation rule |
+| **Customer replied** | A customer sends a new reply on an existing open ticket |
+
+## Channel Routing
+
+Not all events carry the same urgency. SupportDesk lets you route different notification types to different Slack channels so that your team's alerting reflects the severity of each event.
+
+For example, you might configure:
+
+- **#support-queue** — New ticket created, Customer replied
+- **#support-alerts** — SLA warning, SLA breached, Ticket assigned to you
+- **#sev1-alerts** — Escalation triggered
+
+To configure channel routing, go to **Settings → Integrations → Slack → Notification Routing** and assign a target channel to each event type. Any event without a specific channel assignment will fall back to your default notification channel.
+
+## Slack Message Format
+
+Every Slack notification sent by SupportDesk follows a consistent format so your team can quickly scan and act on alerts. Each message includes:
+
+- **Ticket ID** — e.g., `TKT-1042`
+- **Subject** — the ticket's subject line
+- **Requester** — the customer's name and email address
+- **Priority** — Low, Normal, High, or Urgent
+- **Status** — the current ticket status
+- **Deep link** — a clickable **View Ticket** button that opens the ticket directly in SupportDesk
+
+For SLA-related notifications, the message also includes the SLA policy name and the projected breach time so your team knows exactly how much time they have to respond.
+
+<Tip>
+  Create a dedicated `#support-alerts` channel in Slack specifically for SupportDesk notifications. Keeping support alerts separate from your general team channels makes it easier to spot urgent events at a glance and prevents important alerts from getting buried in busier channels.
+</Tip>
+
+<Note>
+  Slack notifications are in addition to — not a replacement for — in-app notifications and email alerts in SupportDesk. Disabling a notification type in Slack does not affect whether that notification is delivered through other channels. You can manage in-app and email notification preferences separately under **Settings → Notifications**.
+</Note>

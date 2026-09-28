@@ -1,0 +1,101 @@
+---
+title: "SLA Policies: Set Response and Resolution Targets"
+sidebarTitle: "SLA Policies"
+description: "Define SLA policies in SupportDesk to set first-response and resolution time targets by priority level. Track breaches and keep your team accountable."
+---
+
+Service Level Agreements (SLAs) are the commitments your team makes to respond to and resolve tickets within defined timeframes. In a high-complexity support environment, where a single ticket might require coordination across engineering, account management, and support leadership, having clear SLA targets keeps everyone anchored to customer expectations. SupportDesk lets you define policies by priority level, configure business hours, and automatically flag or escalate tickets that are at risk of breaching.
+
+## What SLAs Measure
+
+SupportDesk tracks three distinct response milestones for every ticket:
+
+- **First Response Time** — how long from ticket creation until an agent sends the first reply to the customer. This is the most visible SLA metric and typically the one customers care about most.
+- **Next Response Time** — how long an agent takes to reply after a customer sends a follow-up message. This keeps conversations from going cold during multi-exchange investigations.
+- **Resolution Time** — the total elapsed time from ticket creation until the ticket is marked Resolved or Closed. For complex technical issues, this is often the hardest target to hit consistently.
+
+## SLA Policy Structure
+
+SLA targets are assigned per priority level. SupportDesk ships with a default policy that applies the following targets:
+
+| Priority | First Response | Resolution |
+|---|---|---|
+| **Critical** | 1 hour | 8 hours |
+| **High** | 4 hours | 24 hours |
+| **Normal** | 8 hours | 72 hours |
+| **Low** | 24 hours | 7 days |
+
+You can edit these defaults or create multiple named policies — for example, one for your Enterprise tier and a separate one for Standard customers.
+
+## Business Hours
+
+SLA clocks can run on **calendar time** (24/7) or **business hours** only. For most teams, ticking the clock only during working hours is the right approach — it prevents tickets that arrive Friday evening from breaching over the weekend.
+
+To configure business hours:
+
+1. Go to **Settings > SLAs > Business Hours**.
+2. Set your working days and time window (e.g., Monday–Friday, 9 AM–6 PM).
+3. Choose your team's **timezone** from the dropdown. All SLA calculations will be anchored to this timezone.
+4. Optionally, add **holiday exceptions** — specific dates when the SLA clock is paused entirely.
+
+Once business hours are configured, any SLA policy can be set to use either calendar time or your business hours schedule.
+
+## SLA Clock Pausing
+
+When you're waiting on information from the customer, your team shouldn't be penalized for their silence. SupportDesk automatically **pauses the SLA clock** whenever a ticket's status is set to **Pending Customer**. The clock resumes the moment the customer sends a reply, which transitions the ticket back to Open.
+
+This means agents should actively use the Pending Customer status rather than leaving tickets Open while waiting — it keeps your SLA metrics honest and your dashboard accurate.
+
+<Tip>
+  Make it a team habit to set tickets to **Pending Customer** immediately after sending a reply that requires customer action. This pauses the resolution clock and ensures your SLA dashboard reflects actual work time rather than waiting time.
+</Tip>
+
+## SLA Breaches
+
+When a ticket crosses an SLA deadline without the required action:
+
+- The ticket is **flagged visually** in the queue with a breach indicator (red timestamp).
+- A **notification is sent** to the assigned agent and optionally their team lead.
+- Any **escalation automation rules** that trigger on `SLA Breached` will fire — for example, reassigning the ticket to a senior agent or notifying an account manager.
+
+Breached tickets appear at the top of the SLA Dashboard and are filterable in ticket views so you can triage them immediately.
+
+## Creating Custom SLA Policies
+
+<Steps>
+  <Step title="Navigate to SLA Settings">
+    Go to **Settings > SLAs > Policies** and click **New Policy**.
+  </Step>
+  <Step title="Name Your Policy">
+    Give the policy a descriptive name, such as `Enterprise SLA` or `Standard SLA`. This name appears in the SLA dashboard and ticket details panel.
+  </Step>
+  <Step title="Set Response Targets">
+    For each priority level (Critical, High, Normal, Low), enter your First Response Time, Next Response Time, and Resolution Time targets. You can specify values in minutes, hours, or days.
+  </Step>
+  <Step title="Choose Time Basis">
+    Select whether this policy runs on **Calendar Time** or your configured **Business Hours** schedule.
+  </Step>
+  <Step title="Configure Breach Notifications">
+    Choose who gets notified on breach: the assigned agent, team lead, or a specific email address. You can also configure a **warning notification** to fire at a percentage of the deadline — for example, alert the agent when 75% of the response window has elapsed.
+  </Step>
+  <Step title="Assign the Policy">
+    Save the policy. Then assign it to tickets automatically using an Automation Rule (for example: if Account Plan = Enterprise → apply `Enterprise SLA` policy) or set it as the default policy for all tickets.
+  </Step>
+</Steps>
+
+## SLA Dashboard
+
+The SLA Dashboard gives you a real-time and historical view of how your team is tracking against commitments. Access it at **Reports > SLA Dashboard**.
+
+You can view compliance by:
+
+- **Agent** — see which agents are consistently meeting or missing targets
+- **Team** — compare performance across support teams
+- **Priority level** — identify whether a specific tier (e.g., Critical) is harder to meet
+- **Time period** — filter by day, week, month, or custom date range
+
+The dashboard displays **SLA Met %** alongside raw counts of met and breached tickets, so you can spot trends before they become systemic problems.
+
+<Note>
+  If you support multiple customer tiers — for example, Enterprise and Standard — consider creating a separate SLA policy for each. You can use Automation Rules to automatically assign the correct policy based on a custom field like Account Plan or a tag applied at ticket creation. This lets you honor differentiated support commitments without manual intervention.
+</Note>

@@ -1,0 +1,320 @@
+---
+title: "Tickets API — Create, Read, Update, and Delete Tickets"
+sidebarTitle: "Tickets"
+description: "REST API endpoints for managing support tickets in SupportDesk. Create tickets, update status, assign agents, and retrieve ticket details programmatically."
+---
+
+Tickets are the core resource in SupportDesk. Every support case — whether submitted by a customer, created by an agent, or generated programmatically — is a ticket. The Tickets API lets you create new tickets from any surface (your app, a form, an automation), update their status and assignments, retrieve full ticket details, and soft-delete tickets you no longer need. All ticket endpoints require a valid API key passed in the `Authorization` header.
+
+---
+
+## GET /tickets
+
+Retrieve a paginated list of tickets in your workspace. You can filter by status, priority, assignee, or team to narrow results.
+
+**Query Parameters**
+
+| Parameter | Type | Description |
+|---|---|---|
+| `status` | string | Filter by ticket status. Values: `open`, `pending`, `resolved`, `closed`. |
+| `priority` | string | Filter by priority. Values: `low`, `normal`, `high`, `critical`. |
+| `assignee_id` | string | Return only tickets assigned to this agent ID. |
+| `team_id` | string | Return only tickets belonging to this team ID. |
+| `page` | integer | Page number for pagination. Defaults to `1`. |
+| `per_page` | integer | Number of results per page. Defaults to `25`. Maximum `100`. |
+
+**Example Request**
+
+```bash
+curl https://api.supportdesk.io/v1/tickets?status=open&priority=high&per_page=2 \
+  -H "Authorization: Bearer sk_live_abc123xyz"
+```
+
+**Example Response** `200 OK`
+
+```json
+{
+  "data": [
+    {
+      "id": "tkt_01HXYZ001",
+      "subject": "Login page returns 500 on SSO callback",
+      "status": "open",
+      "priority": "high",
+      "requester": {
+        "id": "usr_01HXYZ501",
+        "email": "alice@acmecorp.com",
+        "name": "Alice Chen"
+      },
+      "assignee": {
+        "id": "usr_01HXYZ201",
+        "name": "Jordan Lee"
+      },
+      "team": {
+        "id": "team_01HXY001",
+        "name": "Infrastructure"
+      },
+      "created_at": "2024-05-10T09:14:22Z",
+      "updated_at": "2024-05-10T11:03:47Z"
+    },
+    {
+      "id": "tkt_01HXYZ002",
+      "subject": "Webhook payloads missing custom_fields after v2.3 upgrade",
+      "status": "open",
+      "priority": "high",
+      "requester": {
+        "id": "usr_01HXYZ502",
+        "email": "dev@startupco.io",
+        "name": "Marco Ricci"
+      },
+      "assignee": null,
+      "team": {
+        "id": "team_01HXY002",
+        "name": "Integrations"
+      },
+      "created_at": "2024-05-10T10:55:08Z",
+      "updated_at": "2024-05-10T10:55:08Z"
+    }
+  ],
+  "meta": {
+    "page": 1,
+    "per_page": 2,
+    "total": 38,
+    "total_pages": 19
+  }
+}
+```
+
+---
+
+## POST /tickets
+
+Create a new ticket in your workspace. You can specify the requester, assign it to an agent or team immediately, and include any custom field values defined on your account.
+
+**Request Body**
+
+<ParamField body="subject" type="string" required>
+  A short, descriptive title for the ticket. Maximum 255 characters.
+</ParamField>
+
+<ParamField body="description" type="string" required>
+  The full body of the ticket describing the issue. Supports plain text. Maximum 50,000 characters.
+</ParamField>
+
+<ParamField body="priority" type="string">
+  The ticket's urgency level. One of `low`, `normal`, `high`, or `critical`. Defaults to `"normal"` if omitted.
+</ParamField>
+
+<ParamField body="requester_email" type="string" required>
+  The email address of the customer submitting the ticket. If a contact with this email already exists, the ticket is linked to them. Otherwise, a new contact is created automatically.
+</ParamField>
+
+<ParamField body="requester_name" type="string">
+  The display name of the requester. Used when creating a new contact. Ignored if the contact already exists.
+</ParamField>
+
+<ParamField body="assignee_id" type="string">
+  The ID of the agent to assign the ticket to. Must be an active agent in your workspace.
+</ParamField>
+
+<ParamField body="team_id" type="string">
+  The ID of the team to route the ticket to. If both `assignee_id` and `team_id` are provided, the ticket is assigned to both.
+</ParamField>
+
+<ParamField body="custom_fields" type="object">
+  A key-value map of custom field values. Keys must match the field identifiers configured in **Settings > Custom Fields**. Values must match the field's expected type.
+</ParamField>
+
+**Example Request**
+
+```bash
+curl https://api.supportdesk.io/v1/tickets \
+  -X POST \
+  -H "Authorization: Bearer sk_live_abc123xyz" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "subject": "API returns 403 on POST /orders despite valid token",
+    "description": "Since yesterday around 14:00 UTC, our service account is getting 403 responses on POST /orders. The token has not changed and GET /orders still works fine.",
+    "priority": "critical",
+    "requester_email": "ops@bigretail.com",
+    "requester_name": "Ops Team",
+    "team_id": "team_01HXY001",
+    "custom_fields": {
+      "account_plan": "enterprise",
+      "affected_region": "us-east-1"
+    }
+  }'
+```
+
+**Example Response** `201 Created`
+
+```json
+{
+  "id": "tkt_01HXYZ003",
+  "subject": "API returns 403 on POST /orders despite valid token",
+  "description": "Since yesterday around 14:00 UTC, our service account is getting 403 responses on POST /orders. The token has not changed and GET /orders still works fine.",
+  "status": "open",
+  "priority": "critical",
+  "requester": {
+    "id": "usr_01HXYZ503",
+    "email": "ops@bigretail.com",
+    "name": "Ops Team"
+  },
+  "assignee": null,
+  "team": {
+    "id": "team_01HXY001",
+    "name": "Infrastructure"
+  },
+  "custom_fields": {
+    "account_plan": "enterprise",
+    "affected_region": "us-east-1"
+  },
+  "created_at": "2024-05-10T13:22:04Z",
+  "updated_at": "2024-05-10T13:22:04Z"
+}
+```
+
+---
+
+## GET /tickets/:id
+
+Retrieve the full details of a single ticket by its ID.
+
+**Path Parameters**
+
+| Parameter | Description |
+|---|---|
+| `id` | The unique ID of the ticket (e.g., `tkt_01HXYZ003`). |
+
+**Example Request**
+
+```bash
+curl https://api.supportdesk.io/v1/tickets/tkt_01HXYZ003 \
+  -H "Authorization: Bearer sk_live_abc123xyz"
+```
+
+**Response Fields**
+
+<ResponseField name="id" type="string">
+  The unique identifier for the ticket.
+</ResponseField>
+
+<ResponseField name="subject" type="string">
+  The short title of the ticket.
+</ResponseField>
+
+<ResponseField name="description" type="string">
+  The full description of the issue as provided by the requester.
+</ResponseField>
+
+<ResponseField name="priority" type="string">
+  The ticket's priority level: `low`, `normal`, `high`, or `critical`.
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  The ticket's current status: `open`, `pending`, `resolved`, or `closed`.
+</ResponseField>
+
+<ResponseField name="requester" type="object">
+  The contact who submitted the ticket. Contains `id`, `email`, and `name`.
+</ResponseField>
+
+<ResponseField name="assignee" type="object | null">
+  The agent currently assigned to the ticket. Contains `id` and `name`. `null` if unassigned.
+</ResponseField>
+
+<ResponseField name="team" type="object | null">
+  The team the ticket is routed to. Contains `id` and `name`. `null` if not assigned to a team.
+</ResponseField>
+
+<ResponseField name="custom_fields" type="object">
+  A key-value map of custom field values set on this ticket. Keys correspond to field identifiers defined in your workspace settings.
+</ResponseField>
+
+<ResponseField name="created_at" type="string">
+  ISO 8601 timestamp of when the ticket was created.
+</ResponseField>
+
+<ResponseField name="updated_at" type="string">
+  ISO 8601 timestamp of the most recent update to the ticket.
+</ResponseField>
+
+---
+
+## PATCH /tickets/:id
+
+Update one or more fields on an existing ticket. Only the fields you include in the request body will be changed — omitted fields remain untouched.
+
+**Path Parameters**
+
+| Parameter | Description |
+|---|---|
+| `id` | The unique ID of the ticket to update. |
+
+**Updatable Fields**
+
+| Field | Type | Description |
+|---|---|---|
+| `status` | string | New status: `open`, `pending`, `resolved`, or `closed`. |
+| `priority` | string | New priority: `low`, `normal`, `high`, or `critical`. |
+| `assignee_id` | string | ID of the agent to assign. Pass `null` to unassign. |
+| `team_id` | string | ID of the team to route to. Pass `null` to remove team assignment. |
+| `subject` | string | Updated ticket subject. |
+| `description` | string | Updated ticket description. |
+| `custom_fields` | object | Partial update of custom field values. Only the keys you include are updated. |
+
+**Example Request — Mark a ticket as resolved**
+
+```bash
+curl https://api.supportdesk.io/v1/tickets/tkt_01HXYZ003 \
+  -X PATCH \
+  -H "Authorization: Bearer sk_live_abc123xyz" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "status": "resolved",
+    "assignee_id": "usr_01HXYZ201"
+  }'
+```
+
+**Example Response** `200 OK`
+
+```json
+{
+  "id": "tkt_01HXYZ003",
+  "subject": "API returns 403 on POST /orders despite valid token",
+  "status": "resolved",
+  "priority": "critical",
+  "assignee": {
+    "id": "usr_01HXYZ201",
+    "name": "Jordan Lee"
+  },
+  "updated_at": "2024-05-10T15:48:30Z"
+}
+```
+
+---
+
+## DELETE /tickets/:id
+
+Soft-delete a ticket, moving it to the workspace trash. Soft-deleted tickets are not returned in `GET /tickets` results but remain recoverable from the dashboard for **30 days** before being permanently purged.
+
+**Path Parameters**
+
+| Parameter | Description |
+|---|---|
+| `id` | The unique ID of the ticket to delete. |
+
+**Example Request**
+
+```bash
+curl https://api.supportdesk.io/v1/tickets/tkt_01HXYZ003 \
+  -X DELETE \
+  -H "Authorization: Bearer sk_live_abc123xyz"
+```
+
+**Response** `204 No Content`
+
+The response body is empty on success. If the ticket is already in the trash or does not exist, the API returns `404 Not Found`.
+
+<Note>
+  Ticket deletion via the API is a soft delete. The ticket moves to the workspace trash and can be restored by an Admin from **Settings > Trash** within 30 days. After 30 days, the ticket and all its comments are permanently deleted and cannot be recovered.
+</Note>

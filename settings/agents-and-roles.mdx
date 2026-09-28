@@ -1,0 +1,79 @@
+---
+title: "Manage Agents, Teams, and Role Permissions"
+sidebarTitle: "Agents & Roles"
+description: "Invite support agents, organize them into teams, and control access with role-based permissions in SupportDesk. Manage who can view, reply, and administer tickets."
+---
+
+SupportDesk uses role-based access control to make sure the right people have the right level of access to your workspace. Whether you're a two-person support team or a larger operation with multiple specialized groups, you can invite agents at the appropriate permission level, organize them into teams for clean ticket routing, and manage off-boarding without losing ticket history. This guide covers everything you need to know about agents, roles, and teams.
+
+## Roles
+
+Every agent in SupportDesk is assigned one of three roles. Roles determine what an agent can view, do, and configure across the workspace.
+
+| Role | What They Can Do |
+|---|---|
+| **Admin** | Full access to all tickets, settings, billing, integrations, automation rules, and user management. Can invite and deactivate agents and change workspace configuration. |
+| **Agent** | Can view all tickets in their assigned teams, reply to customers, add internal notes, reassign tickets, and update ticket fields. Cannot access billing, workspace settings, or integrations. |
+| **Viewer** | Read-only access to tickets. Can view ticket details and conversation history but cannot reply, add notes, or make any changes. Useful for stakeholders who need visibility without the ability to act. |
+
+Roles are assigned at the point of invitation and can be changed at any time by an Admin under **Settings → Agents**.
+
+## Inviting Agents
+
+<Steps>
+  <Step title="Open agent settings">
+    Go to **Settings → Agents** in your SupportDesk workspace.
+  </Step>
+  <Step title="Click Invite Agent">
+    Click the **Invite Agent** button in the top right corner of the Agents page.
+  </Step>
+  <Step title="Enter the agent's email address">
+    Type the email address of the person you're inviting. You can invite multiple agents at once by entering multiple email addresses separated by commas.
+  </Step>
+  <Step title="Select a role">
+    Choose the role you want to assign: **Admin**, **Agent**, or **Viewer**. You can change this later if needed.
+  </Step>
+  <Step title="Send the invitation">
+    Click **Send Invite**. The invitee receives an email with a link to set up their SupportDesk account. The invite link expires after 72 hours — if it expires, you can resend it from the Agents page.
+  </Step>
+</Steps>
+
+## Teams
+
+Teams are logical groups of agents that you use to organize your support operation. Routing rules, SLA policies, and automation can all reference teams as assignment targets, making it easy to direct different types of tickets to the right group automatically.
+
+Common ways SaaS support teams use teams in SupportDesk:
+
+- **Tier 1 / Tier 2** — Route general inquiries to Tier 1 and escalate complex technical issues to Tier 2 automatically
+- **Product area** — Group agents by the part of your product they specialize in (e.g., "Billing & Accounts", "API & Integrations", "Core Product")
+- **Shift-based** — Create separate teams for time zones or shifts so routing rules can target on-call staff
+
+### Creating a Team
+
+Go to **Settings → Teams** and click **New Team**. Fill in the following details:
+
+- **Name** — A short, descriptive name (e.g., "Technical Support", "Onboarding").
+- **Description** — An optional internal note about what this team handles.
+- **Members** — Add agents to the team by searching for their name or email. Agents can belong to multiple teams.
+- **Round-Robin Assignment** — Enable this toggle to automatically distribute new tickets assigned to this team evenly across its members. When disabled, tickets assigned to the team are unassigned to any specific agent until manually claimed or routed by an automation rule.
+
+## Deactivating Agents
+
+When an agent leaves your team, you should deactivate their account rather than delete it. Deactivating preserves all ticket history, internal notes, and reply records associated with that agent — this is important for audit and context purposes.
+
+To deactivate an agent:
+1. Go to **Settings → Agents**.
+2. Find the agent's name and click the **⋯** menu to the right of their row.
+3. Select **Deactivate Agent** and confirm.
+
+Once deactivated, the agent cannot log in to SupportDesk. Any tickets previously assigned to them remain in the system and can be reassigned to active agents. Deactivated agents do not count toward your plan's seat limit and can be reactivated at any time.
+
+## SSO (Enterprise)
+
+If your organization uses a SAML-based single sign-on provider — such as Okta, Azure AD, or Google Workspace — you can configure SupportDesk to authenticate agents through your identity provider. When SSO is enabled, agents log in using their company credentials rather than a SupportDesk password, and you can manage access centrally through your IdP.
+
+SSO configuration is available on the **Enterprise plan** and is set up under **Settings → Security → SSO**. Contact your SupportDesk account manager or [sales@supportdesk.io](mailto:sales@supportdesk.io) to enable SSO for your workspace.
+
+<Note>
+  Each SupportDesk plan includes a maximum number of active agent seats: **3 agents** on Starter, **10 agents** on Growth, and **unlimited agents** on Enterprise. Viewer accounts do not count toward your agent seat limit. If you need to add more agents than your current plan allows, upgrade your plan under **Settings → Billing**.
+</Note>

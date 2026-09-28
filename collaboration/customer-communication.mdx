@@ -1,0 +1,141 @@
+---
+title: "Communicating with Customers Through Tickets"
+sidebarTitle: "Customer Communication"
+description: "Write, format, and send replies to customers in SupportDesk. Learn how to use rich text, attachments, canned responses, and the customer timeline."
+---
+
+Every message you send through a SupportDesk ticket is part of a running conversation the customer experiences as a coherent thread — whether they're reading it in their email inbox or inside the customer portal. The reply editor gives you a full set of formatting and composition tools so you can communicate clearly and professionally, whether you're sending a quick acknowledgment or a detailed technical walkthrough. Understanding the distinction between customer-facing replies and internal notes, and knowing where to find the full history of your communication with a customer, will help you run tighter, more confident support conversations.
+
+## Writing a Reply
+
+Customer replies are composed in the ticket's reply editor and delivered to the customer via email and, if applicable, the customer portal.
+
+<Steps>
+  <Step title="Open the ticket">
+    Navigate to the ticket you want to respond to.
+  </Step>
+  <Step title="Click the Reply tab">
+    At the bottom of the ticket thread, ensure the **Reply** tab is selected in the editor (not Internal Note). The editor background is white for replies.
+  </Step>
+  <Step title="Compose your message">
+    Write your reply in the editor. You can use the formatting toolbar to style your message, insert code blocks, or add attachments.
+  </Step>
+  <Step title="Send or save as draft">
+    Click **Send Reply** to deliver the message immediately, or click the dropdown arrow next to the button and select **Save Draft** to hold the message for review before sending. Drafts are only visible to agents.
+  </Step>
+</Steps>
+
+## Rich Text Formatting
+
+The reply editor supports a full range of formatting options so you can structure complex technical responses clearly.
+
+| Format | How to Apply |
+|---|---|
+| **Bold** | Select text and click **B**, or press ⌘B / Ctrl+B |
+| *Italic* | Select text and click **I**, or press ⌘I / Ctrl+I |
+| Bullet list | Click the bullet list icon in the toolbar |
+| Numbered list | Click the numbered list icon in the toolbar |
+| `Inline code` | Select text and click the inline code button, or wrap with backticks |
+| Code block | Click the code block button or type three backticks on a new line |
+
+Use code blocks when sharing commands, configuration snippets, or error messages with customers — it makes them easy to copy and impossible to misread due to font rendering.
+
+## Attachments
+
+You can attach files to any customer reply — screenshots, log excerpts, configuration templates, or documentation PDFs.
+
+<Steps>
+  <Step title="Add an attachment">
+    Either **drag and drop** a file directly onto the reply editor, or click the **paperclip icon** in the editor toolbar to open a file picker.
+  </Step>
+  <Step title="Confirm the upload">
+    Attached files appear as thumbnails or file name chips below the editor. Images are shown as inline previews.
+  </Step>
+  <Step title="Remove if needed">
+    Click the **×** on any attachment chip to remove it before sending.
+  </Step>
+</Steps>
+
+<Note>
+  The maximum file size per attachment is **25MB**. Supported file types include images (PNG, JPG, GIF, WebP), documents (PDF, DOCX, XLSX, CSV, TXT), archives (ZIP), and log files. Executable files (.exe, .sh, .bat) are blocked for security reasons.
+</Note>
+
+## CC and BCC
+
+Sometimes a reply needs to go to more than just the primary ticket contact. You can add CC or BCC recipients directly in the reply editor.
+
+<Steps>
+  <Step title="Expand the recipient fields">
+    In the reply editor, click **CC** or **BCC** to expand the recipient fields above the message body.
+  </Step>
+  <Step title="Add addresses">
+    Type or paste email addresses into the CC or BCC fields. You can add multiple addresses separated by commas.
+  </Step>
+  <Step title="Send the reply">
+    When you send the reply, CC'd recipients receive a copy of the message. BCC'd recipients receive the message silently — neither the customer nor CC'd recipients can see who was BCC'd.
+  </Step>
+</Steps>
+
+CC and BCC recipients are recorded in the ticket timeline so your team can see who received each message. Common uses include CCing a customer's manager during an escalation or BCC'ing a procurement contact for billing-related replies.
+
+## Customer Timeline
+
+The **Customer Timeline** is a filtered view of the ticket that shows only customer-facing messages — everything a customer has sent and received, in chronological order, with no internal notes or team activity visible.
+
+To access it:
+
+<Steps>
+  <Step title="Open the ticket">
+    Navigate to any ticket with a customer conversation.
+  </Step>
+  <Step title="Click Customer Timeline">
+    In the ticket header, click the **Customer Timeline** tab (or select it from the view options menu if your workspace has customized the layout).
+  </Step>
+  <Step title="Review the conversation">
+    The timeline shows each customer-facing message with its timestamp, sender, and delivery status. Use this view when you need to audit what was communicated to the customer or prepare for a follow-up call.
+  </Step>
+</Steps>
+
+## Reply vs. Note
+
+Understanding the distinction between a **Reply** and an **Internal Note** is essential for maintaining customer trust.
+
+| | Reply | Internal Note |
+|---|---|---|
+| **Visible to customer** | ✅ Yes | ❌ Never |
+| **Delivered by email** | ✅ Yes | ❌ No |
+| **Visible in customer portal** | ✅ Yes | ❌ No |
+| **Can @mention agents** | ❌ No | ✅ Yes |
+| **Supports code blocks** | ✅ Yes | ✅ Yes |
+| **Appears in Customer Timeline** | ✅ Yes | ❌ No |
+
+Always double-check which tab is active before composing a message. The editor header clearly labels the active mode, and the background color changes — white for Reply, yellow for Internal Note.
+
+## Canned Responses
+
+Canned responses are pre-written message templates your workspace admins create for common reply scenarios — acknowledgment messages, troubleshooting checklists, closure scripts, and more. You can insert a canned response into any reply with a few keystrokes and then personalize it before sending.
+
+<Steps>
+  <Step title="Open the reply editor">
+    Start a new reply in the ticket as normal.
+  </Step>
+  <Step title="Trigger the template picker">
+    Either type **/** at the start of a new line in the editor, or click the **template icon** (document with a star) in the editor toolbar. The canned response picker opens.
+  </Step>
+  <Step title="Search for a template">
+    Type a keyword to filter available templates. Results appear in real time.
+  </Step>
+  <Step title="Insert the template">
+    Click a template name to insert its content at your cursor position. The text is fully editable after insertion — personalize it as needed before sending.
+  </Step>
+</Steps>
+
+To create or manage canned responses, go to **Settings > Canned Responses**. Only workspace admins and agents with the appropriate permission can create new templates.
+
+<Tip>
+  For complex technical conversations, consider signing off each reply with your name and role — for example, *"— Alex, Senior Support Engineer."* It adds a human touch to what might otherwise feel like a formal exchange, and customers with ongoing technical issues appreciate knowing they're working with the same person throughout.
+</Tip>
+
+<Note>
+  SupportDesk uses **email threading** to keep conversations intact. When a customer replies to any email you send from SupportDesk, their reply is automatically routed back into the original ticket — it does not create a new ticket or land in a general inbox. The threading is maintained using standard email headers, so it works reliably across all major email clients.
+</Note>

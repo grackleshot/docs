@@ -1,0 +1,95 @@
+---
+title: "Connect Your Support Email to SupportDesk"
+sidebarTitle: "Email"
+description: "Route inbound support emails to SupportDesk automatically. Configure email forwarding or MX records to create tickets from every message your team receives."
+---
+
+Email is often the first place your customers turn when something goes wrong, and it's the most common source of inbound support tickets for SaaS teams. SupportDesk's email integration connects your existing support address — such as `support@yourcompany.com` — to your workspace so that every message your team receives automatically becomes a tracked, assignable ticket. Replies sent from SupportDesk thread back into the original conversation, so your customers never notice a change in workflow while your team gains full ticket management on the backend.
+
+## How It Works
+
+When a customer sends an email to your support address, SupportDesk receives it and creates a new ticket containing the sender's name and email, the message subject, and the full email body. From that point forward, every reply — whether from your agent in SupportDesk or from the customer in their inbox — is appended to the same ticket thread.
+
+- **Inbound email** → New ticket created with requester, subject, and message body
+- **Customer replies to your response** → Reply is appended to the existing ticket thread
+- **Agent replies from SupportDesk** → Delivered to the customer from your support address
+- **CC'd recipients** → Captured as ticket followers and notified on updates
+
+## Setup Methods
+
+Choose the setup method that best fits your team's email infrastructure. Email forwarding is faster to configure; MX record setup gives you full control over deliverability.
+
+<Tabs>
+  <Tab title="Email Forwarding (Simpler)">
+    Email forwarding tells your existing email provider to send a copy of every inbound email to your SupportDesk forwarding address. Your current email setup stays intact — you're just adding a forwarding rule on top of it.
+
+    <Steps>
+      <Step title="Find your SupportDesk forwarding address">
+        Go to **Settings → Integrations → Email** in your SupportDesk workspace. Copy the forwarding address shown — it looks like `yourworkspace@inbound.supportdesk.io`.
+      </Step>
+      <Step title="Set up forwarding in your email provider">
+        Log in to your email provider (Google Workspace, Microsoft 365, Fastmail, etc.) and navigate to the forwarding or routing settings for your support address. Add the SupportDesk forwarding address as a forwarding destination.
+      </Step>
+      <Step title="Verify the forwarding connection">
+        Back in SupportDesk, click **Send Verification Email**. SupportDesk will send a test message to confirm the forwarding rule is active. Check that the verification ticket appears in your inbox.
+      </Step>
+      <Step title="Send a test email">
+        Send a real email to your support address from an external account and confirm a ticket is created in SupportDesk within a few seconds.
+      </Step>
+    </Steps>
+  </Tab>
+  <Tab title="MX Record Setup (Recommended)">
+    MX record setup points your support subdomain's DNS directly at SupportDesk's mail servers. This gives you full deliverability control, eliminates forwarding latency, and makes it easier to configure DKIM and SPF records for outbound email authentication.
+
+    <Steps>
+      <Step title="Choose a support subdomain">
+        Decide on the subdomain you'll use for support email — for example, `support@yourcompany.com` or `help@yourcompany.com`. You'll add MX records for the domain or subdomain.
+      </Step>
+      <Step title="Retrieve your MX record values">
+        Go to **Settings → Integrations → Email → MX Setup** in SupportDesk. Copy the MX hostname and priority values shown — for example, `mx.inbound.supportdesk.io` with priority `10`.
+      </Step>
+      <Step title="Update your DNS records">
+        In your DNS provider (Cloudflare, Route 53, GoDaddy, etc.), add the MX record for your support domain or subdomain. DNS changes can take up to 48 hours to propagate, though they typically take effect within a few minutes to a few hours.
+      </Step>
+      <Step title="Verify DNS propagation">
+        Return to **Settings → Integrations → Email** in SupportDesk and click **Check DNS**. SupportDesk will confirm whether the MX records are resolving correctly.
+      </Step>
+      <Step title="Configure DKIM and SPF for outbound email">
+        Follow the DKIM and SPF setup steps shown in SupportDesk to authenticate outbound emails sent on behalf of your domain. This prevents your replies from landing in spam.
+      </Step>
+      <Step title="Send a test email">
+        Send a test email to your support address and confirm the ticket is created in SupportDesk.
+      </Step>
+    </Steps>
+  </Tab>
+</Tabs>
+
+## Outbound Email
+
+When your agents reply to a ticket from SupportDesk, the message is delivered to the customer from your support address — not from a generic SupportDesk address. To ensure deliverability and prevent your replies from being marked as spam, you should configure DKIM and SPF records for your domain.
+
+- **DKIM** — Adds a cryptographic signature to outgoing emails so receiving servers can verify they're legitimate.
+- **SPF** — Specifies which mail servers are authorized to send email on behalf of your domain.
+
+Both records are available under **Settings → Integrations → Email → Outbound Authentication**. Copy and paste the provided values into your DNS provider.
+
+## Email Threading
+
+SupportDesk uses two mechanisms to ensure that reply emails are attached to the correct ticket rather than creating new ones:
+
+1. **Subject line matching** — If an incoming email subject matches an existing open ticket's subject (with a `Re:` prefix), SupportDesk treats it as a reply to that ticket.
+2. **Reply-To header** — Every outbound email from SupportDesk includes a unique `Reply-To` address that encodes the ticket ID. This is the more reliable method — even if the customer changes the subject line, their reply lands in the right ticket.
+
+## Multiple Inboxes
+
+If your team manages more than one support address — for example, `billing@yourcompany.com`, `security@yourcompany.com`, and `support@yourcompany.com` — you can connect each address as a separate **inbox** in SupportDesk. Each inbox has its own forwarding address or MX configuration and can be assigned to a specific team or set of routing rules.
+
+To add a new inbox, go to **Settings → Integrations → Email → Add Inbox** and repeat the setup process for each address. You can route tickets from different inboxes to different teams automatically using the **Routing Rules** settings.
+
+<Note>
+  After completing your forwarding or MX setup, SupportDesk sends a verification email to confirm the connection is working. Check your SupportDesk inbox for a ticket with the subject **"Email connection verified"** — this confirms that inbound emails are being received correctly. If the verification ticket doesn't appear within five minutes, double-check your forwarding rule or DNS records.
+</Note>
+
+<Warning>
+  During setup, make sure you copy your SupportDesk forwarding address carefully before pasting it into your email provider. Forwarding to an incorrect address will silently drop customer emails — they won't bounce back to the sender and won't appear in SupportDesk. Always send a test email immediately after configuring forwarding to confirm tickets are being created.
+</Warning>

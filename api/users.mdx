@@ -1,0 +1,202 @@
+---
+title: "Users API — Manage Agents and Contacts"
+sidebarTitle: "Users"
+description: "REST API endpoints for listing agents and managing customer contacts in SupportDesk. Sync user data with your CRM or provisioning system."
+---
+
+SupportDesk has two types of users: **Agents** are the team members who handle tickets — they have access to the SupportDesk dashboard and can be assigned to tickets, teams, and roles. **Contacts** are customers — the people who submit tickets and receive replies. The Users API lets you list and provision both types programmatically, which is particularly useful when syncing your CRM, onboarding new team members via your identity provider, or building customer portals that need to look up or create contact records.
+
+<Note>
+  Deleting users is intentionally not available through the API to prevent accidental data loss and to preserve ticket history integrity. Agent deactivation and contact deletion must be performed through the **Settings > Team** and **Contacts** sections of the SupportDesk dashboard.
+</Note>
+
+---
+
+## GET /users
+
+List all agents in your workspace. This endpoint returns agents only — to look up contacts, use `GET /users/:id` with a contact's ID, or filter by `role=contact` (see below).
+
+**Query Parameters**
+
+| Parameter | Type | Description |
+|---|---|---|
+| `role` | string | Filter by user role. Values: `admin`, `agent`, `viewer`, `contact`. |
+| `team_id` | string | Return only users who are members of this team. |
+| `page` | integer | Page number for pagination. Defaults to `1`. |
+| `per_page` | integer | Number of results per page. Defaults to `25`. Maximum `100`. |
+
+**Example Request**
+
+```bash
+curl "https://api.supportdesk.io/v1/users?role=agent&team_id=team_01HXY001" \
+  -H "Authorization: Bearer sk_live_abc123xyz"
+```
+
+**Example Response** `200 OK`
+
+```json
+{
+  "data": [
+    {
+      "id": "usr_01HXYZ201",
+      "name": "Jordan Lee",
+      "email": "jordan@yourcompany.io",
+      "role": "agent",
+      "teams": [
+        { "id": "team_01HXY001", "name": "Infrastructure" }
+      ],
+      "created_at": "2024-01-15T08:30:00Z"
+    },
+    {
+      "id": "usr_01HXYZ202",
+      "name": "Priya Nair",
+      "email": "priya@yourcompany.io",
+      "role": "agent",
+      "teams": [
+        { "id": "team_01HXY001", "name": "Infrastructure" },
+        { "id": "team_01HXY003", "name": "On-Call" }
+      ],
+      "created_at": "2024-02-03T10:00:00Z"
+    }
+  ],
+  "meta": {
+    "page": 1,
+    "per_page": 25,
+    "total": 2,
+    "total_pages": 1
+  }
+}
+```
+
+---
+
+## POST /users
+
+Create a new agent or contact in your workspace. Use this endpoint to provision team members programmatically (for example, from your HR system during onboarding) or to pre-create contact records synced from your CRM before tickets arrive.
+
+**Request Body**
+
+<ParamField body="email" type="string" required>
+  The user's email address. Must be unique within the workspace. For agents, this is the address used to log in.
+</ParamField>
+
+<ParamField body="name" type="string" required>
+  The user's full display name as it will appear in tickets and the dashboard.
+</ParamField>
+
+<ParamField body="role" type="string">
+  The user's role. One of `agent`, `viewer`, or `contact`. Defaults to `"contact"` if omitted.
+
+  - `agent` — Full access to the inbox, tickets, and assigned tools based on admin-configured permissions.
+  - `viewer` — Read-only access to the dashboard. Cannot reply to or update tickets.
+  - `contact` — A customer record. Contacts do not have dashboard access and are linked to tickets as requesters.
+</ParamField>
+
+**Example Request — Creating a contact (customer record)**
+
+```bash
+curl https://api.supportdesk.io/v1/users \
+  -X POST \
+  -H "Authorization: Bearer sk_live_abc123xyz" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "nina@enterprise-client.com",
+    "name": "Nina Patel",
+    "role": "contact"
+  }'
+```
+
+**Example Response** `201 Created`
+
+```json
+{
+  "id": "usr_01HXYZ504",
+  "name": "Nina Patel",
+  "email": "nina@enterprise-client.com",
+  "role": "contact",
+  "teams": [],
+  "created_at": "2024-05-10T16:00:00Z"
+}
+```
+
+---
+
+## GET /users/:id
+
+Retrieve the full profile of a single user — agent or contact — by their ID.
+
+**Path Parameters**
+
+| Parameter | Description |
+|---|---|
+| `id` | The unique ID of the user (e.g., `usr_01HXYZ201`). |
+
+**Example Request**
+
+```bash
+curl https://api.supportdesk.io/v1/users/usr_01HXYZ504 \
+  -H "Authorization: Bearer sk_live_abc123xyz"
+```
+
+**Example Response** `200 OK`
+
+```json
+{
+  "id": "usr_01HXYZ504",
+  "name": "Nina Patel",
+  "email": "nina@enterprise-client.com",
+  "role": "contact",
+  "teams": [],
+  "created_at": "2024-05-10T16:00:00Z",
+  "updated_at": "2024-05-10T16:00:00Z"
+}
+```
+
+---
+
+## PATCH /users/:id
+
+Update an existing user's name, role, or team memberships. Only the fields you include in the request body will be modified.
+
+**Path Parameters**
+
+| Parameter | Description |
+|---|---|
+| `id` | The unique ID of the user to update. |
+
+**Updatable Fields**
+
+| Field | Type | Description |
+|---|---|---|
+| `name` | string | Updated display name. |
+| `role` | string | New role: `agent`, `viewer`, or `contact`. Changing an agent to `contact` removes their dashboard access immediately. |
+| `team_ids` | array of strings | Full replacement of the user's team memberships. Pass an empty array `[]` to remove the user from all teams. |
+
+**Example Request — Promote a viewer to agent and add to a team**
+
+```bash
+curl https://api.supportdesk.io/v1/users/usr_01HXYZ203 \
+  -X PATCH \
+  -H "Authorization: Bearer sk_live_abc123xyz" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "role": "agent",
+    "team_ids": ["team_01HXY002", "team_01HXY003"]
+  }'
+```
+
+**Example Response** `200 OK`
+
+```json
+{
+  "id": "usr_01HXYZ203",
+  "name": "Sam Okonkwo",
+  "email": "sam@yourcompany.io",
+  "role": "agent",
+  "teams": [
+    { "id": "team_01HXY002", "name": "Integrations" },
+    { "id": "team_01HXY003", "name": "On-Call" }
+  ],
+  "updated_at": "2024-05-10T16:30:00Z"
+}
+```

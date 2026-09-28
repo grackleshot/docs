@@ -1,7 +1,7 @@
 ---
-title: "SupportDesk REST API Reference"
+title: "SupportDesk REST API: Complete Reference and Overview"
 sidebarTitle: "Introduction"
-description: "The SupportDesk REST API lets you create tickets, post comments, manage users, and configure webhooks programmatically. Base URL: https://api.supportdesk.io/v1"
+description: "The SupportDesk REST API lets you manage tickets, comments, users, and webhooks over HTTPS. Learn the base URL, request format, and error codes."
 ---
 
 The SupportDesk REST API gives you programmatic access to everything your support team does in the dashboard. You can create and update tickets, post replies and internal notes, manage agents and contacts, and register webhooks to stream events to your own systems — all over standard HTTPS requests with JSON payloads. Whether you're building a customer-facing intake form, syncing ticket data into your data warehouse, or wiring SupportDesk into a broader automation pipeline, the API is the building block.
@@ -10,7 +10,7 @@ The SupportDesk REST API gives you programmatic access to everything your suppor
 
 All API requests are made to the following base URL:
 
-```
+```text
 https://api.supportdesk.io/v1
 ```
 
@@ -30,7 +30,7 @@ Query parameters are plain URL-encoded strings. Path parameters are interpolated
 
 Every request must include a valid API key in the `Authorization` header using the Bearer scheme:
 
-```
+```http
 Authorization: Bearer YOUR_API_KEY
 ```
 

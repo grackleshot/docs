@@ -1,7 +1,7 @@
 ---
-title: "How to Create and Submit Support Tickets"
+title: "How to Create Support Tickets via UI, Email, or API"
 sidebarTitle: "Creating Tickets"
-description: "Create support tickets in SupportDesk manually, via email, or through the API. Learn how to capture the right context for complex technical issues from the start."
+description: "Create SupportDesk tickets in the UI, by email, or via the REST API. Capture full context upfront to speed resolution of complex technical cases."
 ---
 
 The quality of a support ticket determines how quickly your team can resolve the underlying issue. SupportDesk gives you three ways to create tickets — through the UI, by sending an email, or programmatically via the API — and each method lets you capture the full context that complex technical cases demand. The more information a ticket contains at creation time, the less back-and-forth your team needs before they can start solving the problem.
@@ -67,7 +67,7 @@ The quality of a support ticket determines how quickly your team can resolve the
       -H "Content-Type: application/json" \
       -d '{
         "subject": "Database connection pooling issue in production",
-        "description": "We are seeing intermittent connection timeouts...",
+        "description": "Intermittent connection timeouts on our primary DB cluster since 14:00 UTC. Affects ~30% of requests. Error: ETIMEDOUT after 5000ms. No recent deploys on our end.",
         "priority": "high",
         "requester_email": "eng@customer.com",
         "custom_fields": {

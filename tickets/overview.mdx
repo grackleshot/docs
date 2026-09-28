@@ -1,7 +1,7 @@
 ---
-title: "Ticket Management Overview in SupportDesk"
+title: "Ticket Management: Fields, Lifecycle, and Structure"
 sidebarTitle: "Overview"
-description: "An overview of how SupportDesk manages support tickets — from submission through resolution, with rich context, custom fields, and full communication history."
+description: "Learn how SupportDesk structures support tickets — covering the full lifecycle, every field, and the three channels through which tickets can be submitted."
 ---
 
 Every support interaction in SupportDesk lives inside a ticket. From the moment a customer submits a request to the moment your team marks it resolved, a ticket captures the full context of the issue — who reported it, what happened, how your team responded, and what it took to close it. For support teams handling low-volume, high-complexity cases, this complete picture is what separates a great support experience from a frustrating one.
@@ -16,23 +16,23 @@ For a detailed breakdown of each status and how to configure custom workflow sta
 
 Each ticket in SupportDesk is a rich record, not just a message thread. The following fields are available on every ticket:
 
-| Field | Description |
-|---|---|
-| **Subject** | A concise title summarizing the issue, entered by the requester or parsed from an email subject line. |
-| **Description** | The full body of the request, including any initial context, steps to reproduce, or error messages provided by the customer. |
-| **Requester** | The customer or user who submitted the ticket, identified by name and email address. |
-| **Assignee** | The agent or team member currently responsible for resolving the ticket. |
-| **Team** | The support team the ticket is routed to (e.g., Enterprise Support, Billing, Infrastructure). |
-| **Status** | The current stage in the ticket lifecycle: Open, In Progress, Pending Customer, Resolved, or Closed. |
-| **Priority** | The urgency level — Low, Normal, High, or Urgent — used to rank tickets in the queue. |
-| **Channel** | The source through which the ticket was submitted: Email, Web Form, or API. |
-| **Custom Fields** | Configurable fields defined by your organization, such as Account Plan, Affected Component, or Product Area. |
-| **Attachments** | Files, screenshots, logs, or other supporting documents uploaded by the requester or your team. |
-| **Tags** | Labels applied manually or by routing rules to categorize and filter tickets. |
-| **Timeline** | A full, chronological log of all activity on the ticket — replies, status changes, assignments, and internal notes. |
-| **Created At** | The timestamp when the ticket was first submitted. |
-| **Updated At** | The timestamp of the most recent activity on the ticket. |
-| **SLA Due Date** | The deadline calculated from your SLA policy, based on priority and creation time. |
+| Field | Type | Description |
+|---|---|---|
+| **Subject** | `string` | A concise title summarizing the issue, entered by the requester or parsed from an email subject line. |
+| **Description** | `string` | The full body of the request, including any initial context, steps to reproduce, or error messages provided by the customer. |
+| **Requester** | `object` | The customer or user who submitted the ticket, identified by name and email address. |
+| **Assignee** | `object` | The agent or team member currently responsible for resolving the ticket. |
+| **Team** | `object` | The support team the ticket is routed to (e.g., Enterprise Support, Billing, Infrastructure). |
+| **Status** | `enum` | The current stage in the ticket lifecycle: `open`, `in_progress`, `pending_customer`, `resolved`, or `closed`. |
+| **Priority** | `enum` | The urgency level — `low`, `normal`, `high`, or `urgent` — used to rank tickets in the queue. |
+| **Channel** | `enum` | The source through which the ticket was submitted: `email`, `web_form`, or `api`. |
+| **Custom Fields** | `object` | Configurable key-value fields defined by your organization, such as `account_plan`, `affected_component`, or `product_area`. |
+| **Attachments** | `array` | Files, screenshots, logs, or other supporting documents uploaded by the requester or your team. |
+| **Tags** | `array` | String labels applied manually or by routing rules to categorize and filter tickets. |
+| **Timeline** | `array` | A full, chronological log of all activity on the ticket — replies, status changes, assignments, and internal notes. |
+| **Created At** | `timestamp` | The ISO 8601 timestamp when the ticket was first submitted. |
+| **Updated At** | `timestamp` | The ISO 8601 timestamp of the most recent activity on the ticket. |
+| **SLA Due Date** | `timestamp` | The deadline calculated from your SLA policy, based on priority and creation time. |
 
 ## Ticket Sources
 

@@ -1,7 +1,7 @@
 ---
-title: "Internal Notes: Collaborate Behind the Scenes"
+title: "Internal Notes: Private Team Collaboration on Tickets"
 sidebarTitle: "Internal Notes"
-description: "Use internal notes in SupportDesk to share context, debugging findings, and escalation details with teammates — invisible to the customer and preserved forever in the ticket."
+description: "Add private notes to any ticket to share context, debug findings, and escalation details with teammates — always invisible to customers in SupportDesk."
 ---
 
 Internal notes are private messages that live inside a ticket and are visible only to your team. For complex technical support cases — multi-step debugging sessions, escalations involving multiple engineers, or tickets that span days or weeks — internal notes give your team a shared scratchpad to document findings, decisions, and open questions without any risk of the customer seeing half-finished thoughts or raw diagnostic data. Every note is timestamped, attributed to an author, and permanently attached to the ticket, so the full investigation trail is always one scroll away.
@@ -50,7 +50,6 @@ Internal notes fully support fenced code blocks, making them ideal for sharing t
 
 For example, you might paste a Python stack trace like this:
 
-````
 ```python
 Traceback (most recent call last):
   File "worker.py", line 42, in process_job
@@ -59,7 +58,6 @@ Traceback (most recent call last):
     raise ValueError(f"Invalid payload key: {key}")
 ValueError: Invalid payload key: user_id
 ```
-````
 
 Code blocks are rendered with a monospace font and a copy button so teammates can grab the content instantly. You can use any language identifier supported by your editor's syntax highlighter.
 
